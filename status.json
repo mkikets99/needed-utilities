@@ -1,0 +1,16 @@
+{
+  "name": "needed-utility",
+  "stack": "kotlin-jetpack-compose",
+  "phase": "v1-complete",
+  "status": "on-track",
+  "buildStatus": "passing",
+  "summary": "Offline-first multi-tool toolbox (unit converter, calculator, tip & split, stopwatch & timer, flashlight) on an extensible grouped home screen. Material 3 + Material You, AGP 9 built-in Kotlin. v1 builds clean; not yet deployed to a physical device.",
+  "nextSteps": [
+    "Deploy to a physical device and smoke-test torch + navigation",
+    "Timer completion feedback (vibration / notification)",
+    "Add more tools behind ToolRegistry (QR scanner, notes, randomizer, discount calculator)",
+    "Calculator history and converter favorites",
+    "Release signing config + first signed build"
+  ],
+  "lastUpdated": "2026-11-09"
+}

@@ -1,0 +1,88 @@
+package com.github.mkikets99.neededutility
+
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.github.mkikets99.neededutility.data.SettingsRepository
+import com.github.mkikets99.neededutility.data.ThemeMode
+import com.github.mkikets99.neededutility.data.ThemeSettings
+import com.github.mkikets99.neededutility.data.ToolPreferences
+import com.github.mkikets99.neededutility.tools.calculator.CalculatorScreen
+import com.github.mkikets99.neededutility.tools.converter.UnitConverterScreen
+import com.github.mkikets99.neededutility.tools.stopwatch.StopwatchScreen
+import com.github.mkikets99.neededutility.tools.torch.TorchScreen
+import com.github.mkikets99.neededutility.tools.tip.TipCalculatorScreen
+import com.github.mkikets99.neededutility.ui.home.HomeScreen
+import com.github.mkikets99.neededutility.ui.settings.SettingsScreen
+import com.github.mkikets99.neededutility.ui.theme.NeededUtilityTheme
+
+object Routes {
+    const val HOME = "home"
+    const val CONVERTER = "converter"
+    const val CALCULATOR = "calculator"
+    const val TIP = "tip"
+    const val STOPWATCH = "stopwatch"
+    const val TORCH = "torch"
+    const val SETTINGS = "settings"
+}
+
+@Composable
+fun NeededUtilityApp() {
+    val context = LocalContext.current
+    val settingsRepository = remember { SettingsRepository(context.applicationContext) }
+    val toolPreferences = remember { ToolPreferences(context.applicationContext) }
+
+    val settings by settingsRepository.settings
+        .collectAsStateWithLifecycle(initialValue = ThemeSettings())
+
+    val darkTheme = when (settings.mode) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+
+    NeededUtilityTheme(darkTheme = darkTheme, dynamicColor = settings.dynamicColor) {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = Routes.HOME) {
+            composable(Routes.HOME) {
+                HomeScreen(
+                    onToolClick = { tool -> navController.navigate(tool.route) },
+                    onSettingsClick = { navController.navigate(Routes.SETTINGS) }
+                )
+            }
+            composable(Routes.CONVERTER) {
+                UnitConverterScreen(
+                    onBack = { navController.popBackStack() },
+                    preferences = toolPreferences
+                )
+            }
+            composable(Routes.CALCULATOR) {
+                CalculatorScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.TIP) {
+                TipCalculatorScreen(
+                    onBack = { navController.popBackStack() },
+                    preferences = toolPreferences
+                )
+            }
+            composable(Routes.STOPWATCH) {
+                StopwatchScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.TORCH) {
+                TorchScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.SETTINGS) {
+                SettingsScreen(
+                    onBack = { navController.popBackStack() },
+                    repository = settingsRepository
+                )
+            }
+        }
+    }
+}
