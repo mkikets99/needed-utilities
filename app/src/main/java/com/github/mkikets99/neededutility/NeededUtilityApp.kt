@@ -15,6 +15,11 @@ import com.github.mkikets99.neededutility.data.ThemeSettings
 import com.github.mkikets99.neededutility.data.ToolPreferences
 import com.github.mkikets99.neededutility.tools.calculator.CalculatorScreen
 import com.github.mkikets99.neededutility.tools.converter.UnitConverterScreen
+import com.github.mkikets99.neededutility.tools.discount.DiscountScreen
+import com.github.mkikets99.neededutility.tools.notes.NotesScreen
+import com.github.mkikets99.neededutility.tools.qr.QrGeneratorScreen
+import com.github.mkikets99.neededutility.tools.qr.QrScannerScreen
+import com.github.mkikets99.neededutility.tools.randomizer.RandomizerScreen
 import com.github.mkikets99.neededutility.tools.stopwatch.StopwatchScreen
 import com.github.mkikets99.neededutility.tools.torch.TorchScreen
 import com.github.mkikets99.neededutility.tools.tip.TipCalculatorScreen
@@ -27,8 +32,13 @@ object Routes {
     const val CONVERTER = "converter"
     const val CALCULATOR = "calculator"
     const val TIP = "tip"
+    const val DISCOUNT = "discount"
+    const val NOTES = "notes"
     const val STOPWATCH = "stopwatch"
     const val TORCH = "torch"
+    const val QR_SCAN = "qr_scan"
+    const val QR_GENERATE = "qr_generate"
+    const val RANDOMIZER = "randomizer"
     const val SETTINGS = "settings"
 }
 
@@ -71,11 +81,26 @@ fun NeededUtilityApp() {
                     preferences = toolPreferences
                 )
             }
+            composable(Routes.DISCOUNT) {
+                DiscountScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.NOTES) {
+                NotesScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.STOPWATCH) {
                 StopwatchScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.TORCH) {
                 TorchScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.QR_SCAN) {
+                QrScannerScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.QR_GENERATE) {
+                QrGeneratorScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.RANDOMIZER) {
+                RandomizerScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.SETTINGS) {
                 SettingsScreen(

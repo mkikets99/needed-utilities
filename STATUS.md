@@ -10,42 +10,48 @@ time, organized in groups.
 
 ## Current state
 
-v1 complete and building. Five tools ship on an extensible grouped home screen:
+v2 complete and building. Ten tools on the extensible grouped home screen:
 
-- Unit Converter (length / mass / temperature / volume) — remembers last-used units
-- Calculator (immediate execution, ±, %)
-- Tip & Split (tip presets + slider, bill split) — remembers tip % and split count
-- Stopwatch & Timer (laps, countdown)
-- Flashlight (torch toggle, permission-aware, graceful no-flash fallback)
+- **Calculations:** Unit Converter (persists units), Calculator
+- **Money:** Tip & Split (persists tip % and split), Discount
+- **Productivity:** Notes (DataStore + JSON, add/edit/delete)
+- **Time:** Stopwatch (laps) & Timer (countdown with vibration + notification)
+- **Device:** Flashlight, QR Scanner (ZXing), QR Generator (ZXing)
+- **Fun & Random:** Randomizer (dice, coin, random number, password generator
+  with copy-to-clipboard)
 
 App shell: Material 3 + Material You dynamic colors, dark mode + theme
 settings (persisted), Navigation Compose, DataStore light persistence.
 Package `com.github.mkikets99.neededutility`, minSdk 29 / targetSdk 37.
 
+Deployed and smoke-tested on a physical device (Samsung Galaxy S24 Ultra,
+Android 17) — home screen, navigation, and torch verified live.
+
 ## Build status
 
 **Passing.** `./gradlew build` succeeds (debug + release APKs, unit tests,
-lint). Verified 2026-11-09 on Windows with JDK 27, Gradle 9.8.2,
-AGP 9.5.1 (built-in Kotlin), Android SDK platform 37.
+lint) with zero compiler warnings. Verified 2026-11-09 on Windows with JDK 27,
+Gradle 9.8.2, AGP 9.5.1 (built-in Kotlin), Android SDK platform 37.
 
 Unit tests: 15 (CalculatorEngineTest, UnitConverterTest) — all green.
-Not yet deployed to a device (no physical device connected at time of work;
-build-only fallback per workspace policy).
 
 ## Known issues / TODO
 
 - Lint is non-fatal; hardcoded UI strings produce warnings (single-language
   app — accepted for v1).
-- Timer end is silent (no alarm/vibration yet).
+- Notes are stored as one JSON blob — fine for small lists, revisit if notes
+  grow large (Room would be the upgrade path).
 - Calculator has no history; expression display is current-value only.
 - No instrumented/UI tests.
 - Release build is unsigned (no release signing config yet).
 
 ## Next steps
 
-1. Deploy to a physical device and smoke-test torch + navigation.
-2. Timer completion feedback (vibration / notification).
-3. More tools behind the same registry (QR scanner, notes, randomizer,
-   discount calculator, ...).
-4. Optional: calculator history, converter favorites.
-5. Release signing config + first signed build.
+1. **Password manager** (deferred by user decision) — vault-style tool;
+   the password *generator* already ships inside Randomizer.
+2. Calculator history; converter favorites.
+3. More tools: unit-aware conversions (currency needs rates → online mode?),
+   QR history, note search/tags.
+4. Release signing config + first signed build.
+5. Optional: extract repeated result-row / dropdown patterns into shared
+   composables as the tool count grows.

@@ -27,8 +27,12 @@ app/src/main/java/com/github/mkikets99/neededutility/
 │   ├── converter/               # UnitConverter.kt (logic) + screen
 │   ├── calculator/              # CalculatorEngine.kt (logic) + screen
 │   ├── tip/                     # Tip & Split screen
-│   ├── stopwatch/               # Stopwatch & Timer screen
-│   └── torch/                   # Flashlight screen
+│   ├── discount/                # Discount screen
+│   ├── notes/                   # NotesRepository (DataStore + JSON) + screen
+│   ├── stopwatch/               # Stopwatch & Timer screen (vibration + notification)
+│   ├── torch/                   # Flashlight screen
+│   ├── qr/                      # QrScannerScreen (ZXing ScanContract), QrGeneratorScreen
+│   └── randomizer/              # Dice, coin, number, password generator
 └── ui/
     ├── home/HomeScreen.kt       # grouped, extensible tool grid
     ├── settings/SettingsScreen.kt
@@ -65,3 +69,17 @@ is connected, build-only is the accepted fallback.
 - Torch tool requires a real camera flash; it gracefully reports when absent.
 - Lint is non-fatal (`abortOnError = false`); check
   `app/build/reports/lint-results-debug.html` before shipping.
+- **ZXing API notes** (learned the hard way): result parsing is
+  `com.journeyapps.barcodescanner.ScanContract` / `ScanOptions`
+  (`ActivityResultContract<ScanOptions, ScanIntentResult>`); the
+  `com.google.zxing.integration.android.IntentIntegrator` class is deprecated.
+- **Clipboard**: use `LocalClipboard.current.setClipEntry(ClipEntry(ClipData...))`;
+  `LocalClipboardManager` is deprecated.
+
+## Approved dependencies (ask user before adding more)
+
+- androidx (core-ktx, activity-compose, lifecycle-*, compose BOM, material3,
+  material-icons-extended, navigation-compose, datastore-preferences)
+- `com.journeyapps:zxing-android-embedded` 4.3.0 + `com.google.zxing:core` 3.5.4
+  (QR scanning/generation — user-approved)
+- junit 4 (tests)

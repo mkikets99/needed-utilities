@@ -3,6 +3,9 @@
 
     <!-- Needed to toggle the camera torch (Flashlight tool). -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Timer completion feedback. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-feature
         android:name="android.hardware.camera.flash"
         android:required="false" />

@@ -1,0 +1,210 @@
+package com.github.mkikets99.neededutility.tools.notes
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.Date
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NotesScreen(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val repository = remember { NotesRepository(context.applicationContext) }
+    val scope = rememberCoroutineScope()
+    val notes by repository.notes.collectAsStateWithLifecycle(initialValue = emptyList())
+
+    var editing by remember { mutableStateOf<Note?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Notes") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    editing = null
+                    showDialog = true
+                },
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add note")
+            }
+        },
+    ) { innerPadding ->
+        if (notes.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "No notes yet.\nTap + to add one.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                items(notes, key = { it.id }) { note ->
+                    Card(
+                        onClick = {
+                            editing = note
+                            showDialog = true
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = note.title.ifBlank { "Untitled" },
+                                style = MaterialTheme.typography.titleMedium,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            if (note.body.isNotBlank()) {
+                                Text(
+                                    text = note.body,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 3,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(top = 4.dp),
+                                )
+                            }
+                            Text(
+                                text = DateFormat.getDateTimeInstance().format(Date(note.updatedAt)),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.outline,
+                                modifier = Modifier.padding(top = 8.dp),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (showDialog) {
+        NoteDialog(
+            note = editing,
+            onSave = { title, body ->
+                val existing = editing
+                scope.launch {
+                    repository.upsert(
+                        Note(
+                            id = existing?.id ?: System.currentTimeMillis(),
+                            title = title,
+                            body = body,
+                            updatedAt = System.currentTimeMillis(),
+                        )
+                    )
+                }
+                showDialog = false
+            },
+            onDelete = { note ->
+                scope.launch { repository.delete(note.id) }
+                showDialog = false
+            },
+            onDismiss = { showDialog = false },
+        )
+    }
+}
+
+@Composable
+private fun NoteDialog(
+    note: Note?,
+    onSave: (title: String, body: String) -> Unit,
+    onDelete: (Note) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var title by remember { mutableStateOf(note?.title ?: "") }
+    var body by remember { mutableStateOf(note?.body ?: "") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(if (note == null) "New note" else "Edit note") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Title") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = body,
+                    onValueChange = { body = it },
+                    label = { Text("Note") },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onSave(title, body) },
+                enabled = title.isNotBlank() || body.isNotBlank(),
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            if (note != null) {
+                TextButton(onClick = { onDelete(note) }) {
+                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                }
+            }
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        },
+    )
+}

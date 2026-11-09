@@ -1,6 +1,18 @@
 package com.github.mkikets99.neededutility.tools.stopwatch
 
+import android.Manifest
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.SystemClock
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,8 +49,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import com.github.mkikets99.neededutility.R
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -173,6 +188,11 @@ private fun StopwatchTab() {
 
 @Composable
 private fun TimerTab() {
+    val context = LocalContext.current
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* feedback works either way; notification is best-effort */ }
+
     var minutesInput by remember { mutableStateOf("1") }
     var secondsInput by remember { mutableStateOf("0") }
     var remainingMs by remember { mutableLongStateOf(60_000L) }
@@ -188,6 +208,10 @@ private fun TimerTab() {
                 last = now
             }
             running = false
+            if (remainingMs == 0L) {
+                vibrateDevice(context)
+                showTimerFinishedNotification(context)
+            }
         }
     }
 
@@ -232,7 +256,18 @@ private fun TimerTab() {
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Button(
-                onClick = { running = !running },
+                onClick = {
+                    if (!running && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val granted = ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS,
+                        ) == PackageManager.PERMISSION_GRANTED
+                        if (!granted) {
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    }
+                    running = !running
+                },
                 enabled = remainingMs > 0L,
                 modifier = Modifier.weight(1f),
             ) {
@@ -260,6 +295,35 @@ private fun totalFromInputs(minutes: String, seconds: String): Long {
     val m = minutes.toLongOrNull() ?: 0L
     val s = (seconds.toLongOrNull() ?: 0L).coerceIn(0L, 59L)
     return (m * 60L + s) * 1000L
+}
+
+private const val TIMER_NOTIFICATION_ID = 1001
+
+@Suppress("DEPRECATION")
+private fun vibrateDevice(context: Context) {
+    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+    } else {
+        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+    vibrator.vibrate(VibrationEffect.createOneShot(600, VibrationEffect.DEFAULT_AMPLITUDE))
+}
+
+private fun showTimerFinishedNotification(context: Context) {
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val channel = NotificationChannel(
+        "timer",
+        "Timer alerts",
+        NotificationManager.IMPORTANCE_HIGH,
+    )
+    manager.createNotificationChannel(channel)
+    val notification = Notification.Builder(context, "timer")
+        .setSmallIcon(R.drawable.ic_stat_timer)
+        .setContentTitle("Timer finished")
+        .setContentText("Your countdown has ended.")
+        .setAutoCancel(true)
+        .build()
+    manager.notify(TIMER_NOTIFICATION_ID, notification)
 }
 
 private fun formatElapsed(ms: Long): String {
