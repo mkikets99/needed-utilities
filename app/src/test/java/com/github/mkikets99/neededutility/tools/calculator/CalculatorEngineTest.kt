@@ -77,4 +77,16 @@ class CalculatorEngineTest {
         engine.toggleSign()
         assertEquals("-7", engine.display)
     }
+
+    @Test
+    fun lastExpressionDescribesOperation() {
+        val engine = CalculatorEngine()
+        engine.inputDigit(5)
+        engine.inputOp('+')
+        engine.inputDigit(3)
+        engine.equals()
+        assertEquals("5 + 3", engine.lastExpression)
+        engine.clear()
+        assertEquals(null, engine.lastExpression)
+    }
 }

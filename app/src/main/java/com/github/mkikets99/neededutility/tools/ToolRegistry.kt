@@ -1,13 +1,24 @@
 package com.github.mkikets99.neededutility.tools
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FlashlightOn
+import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Percent
+import androidx.compose.material.icons.filled.PieChart
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.SortByAlpha
+import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Timer
@@ -20,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 enum class ToolGroup(val title: String) {
     CALCULATIONS("Calculations"),
     MONEY("Money"),
+    HEALTH("Health"),
     PRODUCTIVITY("Productivity"),
     TIME("Time"),
     DEVICE("Device"),
@@ -64,6 +76,22 @@ object ToolRegistry {
             route = "calculator",
         ),
         Tool(
+            id = "percentage",
+            title = "Percentage",
+            description = "P% of X, what %, change",
+            icon = Icons.Filled.PieChart,
+            group = ToolGroup.CALCULATIONS,
+            route = "percentage",
+        ),
+        Tool(
+            id = "base_converter",
+            title = "Base Converter",
+            description = "Binary, octal, decimal, hex",
+            icon = Icons.Filled.Memory,
+            group = ToolGroup.CALCULATIONS,
+            route = "bases",
+        ),
+        Tool(
             id = "tip_splitter",
             title = "Tip & Split",
             description = "Tip and bill splitting",
@@ -80,6 +108,30 @@ object ToolRegistry {
             route = "discount",
         ),
         Tool(
+            id = "loan",
+            title = "Loan Calculator",
+            description = "EMI, interest and total cost",
+            icon = Icons.Filled.AccountBalance,
+            group = ToolGroup.MONEY,
+            route = "loan",
+        ),
+        Tool(
+            id = "unit_price",
+            title = "Unit Price",
+            description = "Compare pack value",
+            icon = Icons.Filled.ShoppingCart,
+            group = ToolGroup.MONEY,
+            route = "unitprice",
+        ),
+        Tool(
+            id = "bmi",
+            title = "BMI Calculator",
+            description = "Body mass index & range",
+            icon = Icons.Filled.Favorite,
+            group = ToolGroup.HEALTH,
+            route = "bmi",
+        ),
+        Tool(
             id = "notes",
             title = "Notes",
             description = "Quick local notes",
@@ -88,12 +140,28 @@ object ToolRegistry {
             route = "notes",
         ),
         Tool(
+            id = "text_toolkit",
+            title = "Text Toolkit",
+            description = "Count, cases, reverse",
+            icon = Icons.Filled.SortByAlpha,
+            group = ToolGroup.PRODUCTIVITY,
+            route = "text",
+        ),
+        Tool(
             id = "stopwatch_timer",
             title = "Stopwatch & Timer",
             description = "Count up or count down",
             icon = Icons.Filled.Timer,
             group = ToolGroup.TIME,
             route = "stopwatch",
+        ),
+        Tool(
+            id = "world_clock",
+            title = "World Clock",
+            description = "Times around the world",
+            icon = Icons.Filled.Public,
+            group = ToolGroup.TIME,
+            route = "worldclock",
         ),
         Tool(
             id = "torch",
@@ -120,12 +188,44 @@ object ToolRegistry {
             route = "qr_generate",
         ),
         Tool(
+            id = "compass",
+            title = "Compass",
+            description = "Magnetic heading",
+            icon = Icons.Filled.Explore,
+            group = ToolGroup.DEVICE,
+            route = "compass",
+        ),
+        Tool(
+            id = "bubble_level",
+            title = "Bubble Level",
+            description = "Surface level tool",
+            icon = Icons.Filled.Straighten,
+            group = ToolGroup.DEVICE,
+            route = "level",
+        ),
+        Tool(
             id = "randomizer",
             title = "Randomizer",
             description = "Dice, coin, numbers & passwords",
             icon = Icons.Filled.Casino,
             group = ToolGroup.FUN,
             route = "randomizer",
+        ),
+        Tool(
+            id = "metronome",
+            title = "Metronome",
+            description = "Beat at any tempo",
+            icon = Icons.Filled.GraphicEq,
+            group = ToolGroup.FUN,
+            route = "metronome",
+        ),
+        Tool(
+            id = "morse_code",
+            title = "Morse Code",
+            description = "Encode & decode morse",
+            icon = Icons.Filled.Code,
+            group = ToolGroup.FUN,
+            route = "morse",
         ),
     )
 }

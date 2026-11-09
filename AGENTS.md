@@ -25,14 +25,25 @@ app/src/main/java/com/github/mkikets99/neededutility/
 ├── tools/
 │   ├── ToolRegistry.kt          # ALL tools + groups are registered here
 │   ├── converter/               # UnitConverter.kt (logic) + screen
-│   ├── calculator/              # CalculatorEngine.kt (logic) + screen
+│   ├── calculator/              # CalculatorEngine.kt, CalculatorHistory.kt + screen
+│   ├── percentage/              # PercentageLogic.kt + screen
+│   ├── bases/                   # BaseConverter.kt + screen
 │   ├── tip/                     # Tip & Split screen
 │   ├── discount/                # Discount screen
+│   ├── loan/                    # LoanCalculator.kt + screen
+│   ├── unitprice/               # UnitPriceCalculator.kt + screen
+│   ├── bmi/                     # BmiCalculator.kt + screen
 │   ├── notes/                   # NotesRepository (DataStore + JSON) + screen
-│   ├── stopwatch/               # Stopwatch & Timer screen (vibration + notification)
+│   ├── text/                    # TextToolkit.kt + screen
+│   ├── stopwatch/               # Stopwatch & Timer (vibration + notification)
+│   ├── worldclock/              # World Clock screen
 │   ├── torch/                   # Flashlight screen
-│   ├── qr/                      # QrScannerScreen (ZXing ScanContract), QrGeneratorScreen
-│   └── randomizer/              # Dice, coin, number, password generator
+│   ├── qr/                      # QrScannerScreen (ScanContract), QrGeneratorScreen, ScanHistory.kt
+│   ├── compass/                 # Compass screen (rotation vector sensor)
+│   ├── level/                   # Bubble Level screen (accelerometer)
+│   ├── randomizer/              # Dice, coin, number, password generator + strength
+│   ├── metronome/               # Metronome screen (ToneGenerator)
+│   └── morse/                   # MorseCodec.kt + screen
 └── ui/
     ├── home/HomeScreen.kt       # grouped, extensible tool grid
     ├── settings/SettingsScreen.kt

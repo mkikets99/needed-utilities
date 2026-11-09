@@ -272,6 +272,24 @@ private fun PasswordTab() {
     }
 
     if (password.isNotEmpty()) {
+        val strength = PasswordStrengthEvaluator.evaluate(password)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text("Strength", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = strength.label,
+                style = MaterialTheme.typography.titleMedium,
+                color = when (strength) {
+                    PasswordStrength.WEAK -> MaterialTheme.colorScheme.error
+                    PasswordStrength.FAIR -> MaterialTheme.colorScheme.tertiary
+                    PasswordStrength.GOOD -> MaterialTheme.colorScheme.secondary
+                    PasswordStrength.STRONG -> MaterialTheme.colorScheme.primary
+                },
+            )
+        }
         Card(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier

@@ -1,16 +1,16 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v2-complete",
+  "phase": "v3-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "Offline-first multi-tool toolbox with 10 tools (converter, calculator, tip & split, discount, notes, stopwatch & timer with vibration+notification, flashlight, QR scanner, QR generator, randomizer incl. password generator) on an extensible grouped home screen. Material 3 + Material You, AGP 9 built-in Kotlin. Build clean with zero warnings; smoke-tested on a physical device.",
+  "summary": "Offline-first multi-tool toolbox with 21 tools across 7 groups (converter, calculator+history, percentage, base converter, tip & split, discount, loan EMI, unit price, BMI, notes, text toolkit, stopwatch & timer with vibration+notification, world clock, flashlight, QR scanner+history, QR generator, compass, bubble level, randomizer with password strength, metronome, morse). Material 3 + Material You, AGP 9 built-in Kotlin, zero warnings, 60 unit tests green.",
   "nextSteps": [
     "Password manager tool (deferred; generator already in Randomizer)",
-    "Calculator history and converter favorites",
-    "More tools: QR history, note search/tags",
+    "Converter favorites, calculator history export",
+    "More tool candidates: date diff, countdown-to-date, fuel efficiency, note search",
     "Release signing config + first signed build",
-    "Extract shared composables as tool count grows"
+    "Extract shared composables (result rows, input fields) into ui/common"
   ],
-  "lastUpdated": "2026-11-09"
+  "lastUpdated": "2026-11-10"
 }

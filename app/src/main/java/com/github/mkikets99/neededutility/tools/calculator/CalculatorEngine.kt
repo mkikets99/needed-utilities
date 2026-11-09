@@ -13,6 +13,10 @@ class CalculatorEngine {
     var display: String = "0"
         private set
 
+    /** Human-readable description of the last completed operation, e.g. "5 + 3". */
+    var lastExpression: String? = null
+        private set
+
     private var accumulator: Double? = null
     private var pendingOp: Char? = null
     private var entering: Boolean = false
@@ -58,6 +62,7 @@ class CalculatorEngine {
         val op = pendingOp ?: return
         val current = display.toDoubleOrNull() ?: 0.0
         val result = applyOp(acc, current, op)
+        lastExpression = "${format(acc)} ${opSymbol(op)} ${format(current)}"
         display = format(result)
         accumulator = null
         pendingOp = null
@@ -66,6 +71,7 @@ class CalculatorEngine {
 
     fun clear() {
         display = "0"
+        lastExpression = null
         accumulator = null
         pendingOp = null
         entering = false
@@ -87,6 +93,13 @@ class CalculatorEngine {
         '*' -> left * right
         '/' -> if (right == 0.0) Double.NaN else left / right
         else -> right
+    }
+
+    private fun opSymbol(op: Char): Char = when (op) {
+        '*' -> '×'
+        '/' -> '÷'
+        '-' -> '−'
+        else -> op
     }
 
     private fun format(value: Double): String = when {
