@@ -54,9 +54,7 @@ Builds fall back to debug signing when no keystore is present.
 
 ## Next steps
 
-1. **Password manager** (deferred by user decision).
-2. Fuel log: per-vehicle logs; CSV export.
-3. Candidates: cooking recipe scaler, BMI history, converter favorites,
-   QR/vCard gallery, unit-aware currency (needs rates → online mode decision).
-4. Play Store prep (listing assets, AAB build — `bundleRelease` ready).
-5. More shared extraction (input fields, top bars).
+See **`STAGE.md`** for the full roadmap (staged / deferred / candidates).
+Highlights staged next: shared input components, countdown exact alarms,
+metronome tap tempo, sensor calibration, converter favorites, data export,
+fuel-log vehicles, BMI history, recipe scaler.

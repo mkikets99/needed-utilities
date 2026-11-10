@@ -67,6 +67,8 @@ is connected, build-only is the accepted fallback.
   only where required (TopAppBar), English strings inline (single-language app).
 - Keep dependencies minimal; ask the user before adding any new library.
 - Update `STATUS.md` and `status.json` after meaningful changes.
+- Plan new work in `STAGE.md` (staged / deferred / candidates). When an item
+  ships, move it out of STAGE.md into STATUS.md.
 
 ## Gotchas
 

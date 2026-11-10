@@ -76,3 +76,4 @@ The app is fully offline: no network permission, no remote services.
 
 - `AGENTS.md` — agent instructions for working in this project
 - `STATUS.md` / `status.json` — current project status (human / machine readable)
+- `STAGE.md` — roadmap: staged, deferred and candidate items
