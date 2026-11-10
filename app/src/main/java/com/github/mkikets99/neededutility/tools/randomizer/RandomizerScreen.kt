@@ -105,7 +105,22 @@ fun RandomizerScreen(onBack: () -> Unit) {
 @Composable
 private fun DiceTab() {
     var diceCount by remember { mutableIntStateOf(2) }
+    var dieSides by remember { mutableIntStateOf(6) }
     var rolls by remember { mutableStateOf(listOf<Int>()) }
+
+    Text("Die type: d$dieSides", style = MaterialTheme.typography.titleSmall)
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        listOf(4, 6, 8, 10, 12, 20).forEach { sides ->
+            FilterChip(
+                selected = dieSides == sides,
+                onClick = {
+                    dieSides = sides
+                    rolls = emptyList()
+                },
+                label = { Text("d$sides") },
+            )
+        }
+    }
 
     Text("Dice: $diceCount", style = MaterialTheme.typography.titleSmall)
     Slider(
@@ -115,7 +130,7 @@ private fun DiceTab() {
         steps = 4,
     )
     Button(
-        onClick = { rolls = List(diceCount) { Random.nextInt(1, 7) } },
+        onClick = { rolls = List(diceCount) { Random.nextInt(1, dieSides + 1) } },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text("Roll")

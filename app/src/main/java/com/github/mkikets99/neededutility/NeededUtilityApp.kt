@@ -13,12 +13,19 @@ import com.github.mkikets99.neededutility.data.SettingsRepository
 import com.github.mkikets99.neededutility.data.ThemeMode
 import com.github.mkikets99.neededutility.data.ThemeSettings
 import com.github.mkikets99.neededutility.data.ToolPreferences
+import com.github.mkikets99.neededutility.tools.age.AgeScreen
 import com.github.mkikets99.neededutility.tools.bases.BaseConverterScreen
 import com.github.mkikets99.neededutility.tools.bmi.BmiScreen
+import com.github.mkikets99.neededutility.tools.bmr.BmrScreen
 import com.github.mkikets99.neededutility.tools.calculator.CalculatorScreen
+import com.github.mkikets99.neededutility.tools.color.ColorScreen
 import com.github.mkikets99.neededutility.tools.compass.CompassScreen
 import com.github.mkikets99.neededutility.tools.converter.UnitConverterScreen
+import com.github.mkikets99.neededutility.tools.countdown.CountdownScreen
+import com.github.mkikets99.neededutility.tools.datediff.DateDiffScreen
 import com.github.mkikets99.neededutility.tools.discount.DiscountScreen
+import com.github.mkikets99.neededutility.tools.electricity.ElectricityScreen
+import com.github.mkikets99.neededutility.tools.fuel.FuelScreen
 import com.github.mkikets99.neededutility.tools.level.LevelScreen
 import com.github.mkikets99.neededutility.tools.loan.LoanScreen
 import com.github.mkikets99.neededutility.tools.metronome.MetronomeScreen
@@ -28,6 +35,8 @@ import com.github.mkikets99.neededutility.tools.percentage.PercentageScreen
 import com.github.mkikets99.neededutility.tools.qr.QrGeneratorScreen
 import com.github.mkikets99.neededutility.tools.qr.QrScannerScreen
 import com.github.mkikets99.neededutility.tools.randomizer.RandomizerScreen
+import com.github.mkikets99.neededutility.tools.roman.RomanScreen
+import com.github.mkikets99.neededutility.tools.savings.SavingsScreen
 import com.github.mkikets99.neededutility.tools.stopwatch.StopwatchScreen
 import com.github.mkikets99.neededutility.tools.text.TextToolkitScreen
 import com.github.mkikets99.neededutility.tools.torch.TorchScreen
@@ -44,15 +53,24 @@ object Routes {
     const val CALCULATOR = "calculator"
     const val PERCENTAGE = "percentage"
     const val BASES = "bases"
+    const val ROMAN = "roman"
+    const val COLOR = "color"
     const val TIP = "tip"
     const val DISCOUNT = "discount"
     const val LOAN = "loan"
     const val UNITPRICE = "unitprice"
+    const val FUEL = "fuel"
+    const val SAVINGS = "savings"
+    const val ELECTRICITY = "electricity"
     const val BMI = "bmi"
+    const val AGE = "age"
+    const val BMR = "bmr"
     const val NOTES = "notes"
     const val TEXT = "text"
     const val STOPWATCH = "stopwatch"
     const val WORLDCLOCK = "worldclock"
+    const val DATEDIFF = "datediff"
+    const val COUNTDOWN = "countdown"
     const val TORCH = "torch"
     const val QR_SCAN = "qr_scan"
     const val QR_GENERATE = "qr_generate"
@@ -103,6 +121,12 @@ fun NeededUtilityApp() {
             composable(Routes.BASES) {
                 BaseConverterScreen(onBack = { navController.popBackStack() })
             }
+            composable(Routes.ROMAN) {
+                RomanScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.COLOR) {
+                ColorScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.TIP) {
                 TipCalculatorScreen(
                     onBack = { navController.popBackStack() },
@@ -118,8 +142,23 @@ fun NeededUtilityApp() {
             composable(Routes.UNITPRICE) {
                 UnitPriceScreen(onBack = { navController.popBackStack() })
             }
+            composable(Routes.FUEL) {
+                FuelScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.SAVINGS) {
+                SavingsScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.ELECTRICITY) {
+                ElectricityScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.BMI) {
                 BmiScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.AGE) {
+                AgeScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.BMR) {
+                BmrScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.NOTES) {
                 NotesScreen(onBack = { navController.popBackStack() })
@@ -132,6 +171,12 @@ fun NeededUtilityApp() {
             }
             composable(Routes.WORLDCLOCK) {
                 WorldClockScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.DATEDIFF) {
+                DateDiffScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.COUNTDOWN) {
+                CountdownScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.TORCH) {
                 TorchScreen(onBack = { navController.popBackStack() })

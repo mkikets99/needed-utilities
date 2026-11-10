@@ -2,20 +2,29 @@ package com.github.mkikets99.neededutility.tools
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FlashlightOn
+import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material.icons.filled.Memory
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Percent
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.SortByAlpha
 import androidx.compose.material.icons.filled.Straighten
@@ -92,6 +101,22 @@ object ToolRegistry {
             route = "bases",
         ),
         Tool(
+            id = "roman_numerals",
+            title = "Roman Numerals",
+            description = "Number ↔ roman",
+            icon = Icons.Filled.FormatListNumbered,
+            group = ToolGroup.CALCULATIONS,
+            route = "roman",
+        ),
+        Tool(
+            id = "color_converter",
+            title = "Color Converter",
+            description = "Hex ↔ RGB with swatch",
+            icon = Icons.Filled.Palette,
+            group = ToolGroup.CALCULATIONS,
+            route = "color",
+        ),
+        Tool(
             id = "tip_splitter",
             title = "Tip & Split",
             description = "Tip and bill splitting",
@@ -124,12 +149,52 @@ object ToolRegistry {
             route = "unitprice",
         ),
         Tool(
+            id = "fuel",
+            title = "Fuel Calculator",
+            description = "Trip cost & consumption",
+            icon = Icons.Filled.LocalGasStation,
+            group = ToolGroup.MONEY,
+            route = "fuel",
+        ),
+        Tool(
+            id = "savings",
+            title = "Savings & Interest",
+            description = "Compound growth",
+            icon = Icons.Filled.Savings,
+            group = ToolGroup.MONEY,
+            route = "savings",
+        ),
+        Tool(
+            id = "electricity",
+            title = "Electricity Cost",
+            description = "Appliance running cost",
+            icon = Icons.Filled.Bolt,
+            group = ToolGroup.MONEY,
+            route = "electricity",
+        ),
+        Tool(
             id = "bmi",
             title = "BMI Calculator",
             description = "Body mass index & range",
             icon = Icons.Filled.Favorite,
             group = ToolGroup.HEALTH,
             route = "bmi",
+        ),
+        Tool(
+            id = "age",
+            title = "Age Calculator",
+            description = "Age & next birthday",
+            icon = Icons.Filled.Cake,
+            group = ToolGroup.HEALTH,
+            route = "age",
+        ),
+        Tool(
+            id = "bmr",
+            title = "Daily Calories",
+            description = "BMR & maintenance",
+            icon = Icons.Filled.LocalFireDepartment,
+            group = ToolGroup.HEALTH,
+            route = "bmr",
         ),
         Tool(
             id = "notes",
@@ -162,6 +227,22 @@ object ToolRegistry {
             icon = Icons.Filled.Public,
             group = ToolGroup.TIME,
             route = "worldclock",
+        ),
+        Tool(
+            id = "date_diff",
+            title = "Date Diff",
+            description = "Days between dates",
+            icon = Icons.Filled.CalendarMonth,
+            group = ToolGroup.TIME,
+            route = "datediff",
+        ),
+        Tool(
+            id = "countdown",
+            title = "Countdown",
+            description = "Days until your events",
+            icon = Icons.Filled.HourglassBottom,
+            group = ToolGroup.TIME,
+            route = "countdown",
         ),
         Tool(
             id = "torch",

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,6 +50,16 @@ fun NotesScreen(onBack: () -> Unit) {
 
     var editing by remember { mutableStateOf<Note?>(null) }
     var showDialog by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+
+    val visibleNotes = if (query.isBlank()) {
+        notes
+    } else {
+        notes.filter {
+            it.title.contains(query, ignoreCase = true) ||
+                it.body.contains(query, ignoreCase = true)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -72,29 +83,42 @@ fun NotesScreen(onBack: () -> Unit) {
             }
         },
     ) { innerPadding ->
-        if (notes.isEmpty()) {
-            Column(
+        Column(modifier = Modifier.padding(innerPadding)) {
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                label = { Text("Search notes") },
+                singleLine = true,
+                leadingIcon = {
+                    Icon(Icons.Filled.Search, contentDescription = null)
+                },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = "No notes yet.\nTap + to add one.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(notes, key = { it.id }) { note ->
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            )
+            if (visibleNotes.isEmpty()) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = if (notes.isEmpty()) {
+                            "No notes yet.\nTap + to add one."
+                        } else {
+                            "No notes match \"$query\"."
+                        },
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    items(visibleNotes, key = { it.id }) { note ->
                     Card(
                         onClick = {
                             editing = note
@@ -129,6 +153,7 @@ fun NotesScreen(onBack: () -> Unit) {
                     }
                 }
             }
+        }
         }
     }
 

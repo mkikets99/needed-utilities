@@ -44,6 +44,7 @@ fun CalculatorScreen(onBack: () -> Unit) {
     val engine = remember { CalculatorEngine() }
     val historyRepository = remember { CalculatorHistoryRepository(context.applicationContext) }
     val history by historyRepository.entries.collectAsStateWithLifecycle(initialValue = emptyList())
+    val clipboard = androidx.compose.ui.platform.LocalClipboard.current
     var display by remember { mutableStateOf(engine.display) }
 
     fun refresh() {
@@ -136,11 +137,25 @@ fun CalculatorScreen(onBack: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text("History", style = MaterialTheme.typography.titleSmall)
-                        if (history.isNotEmpty()) {
-                            OutlinedButton(onClick = {
-                                scope.launch { historyRepository.clear() }
-                            }) {
-                                Text("Clear")
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (history.isNotEmpty()) {
+                                OutlinedButton(onClick = {
+                                    val all = history.joinToString("\n") { "${it.expression} = ${it.result}" }
+                                    scope.launch {
+                                        clipboard.setClipEntry(
+                                            androidx.compose.ui.platform.ClipEntry(
+                                                android.content.ClipData.newPlainText("history", all)
+                                            )
+                                        )
+                                    }
+                                }) {
+                                    Text("Copy all")
+                                }
+                                OutlinedButton(onClick = {
+                                    scope.launch { historyRepository.clear() }
+                                }) {
+                                    Text("Clear")
+                                }
                             }
                         }
                     }
