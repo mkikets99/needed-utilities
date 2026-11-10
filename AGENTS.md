@@ -95,3 +95,6 @@ is connected, build-only is the accepted fallback.
 - `com.journeyapps:zxing-android-embedded` 4.3.0 + `com.google.zxing:core` 3.5.4
   (QR scanning/generation — user-approved)
 - junit 4 (tests)
+- **Pre-approved, not yet added** (user-requested 2026-11-10, see STAGE.md
+  monetization track): Google Mobile Ads SDK (`play-services-ads`) for S-12
+  and Play Billing (`billing-client`) for S-13. Use test ad units in debug.

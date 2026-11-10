@@ -32,6 +32,24 @@ forward-looking plan only).
 | S-08 | Fuel log: vehicles | Multiple named vehicles, each with its own fill-up log | Extends `FuelLogRepository` |
 | S-09 | BMI history | Track weight/BMI over time (small DataStore log + trend list) | Health group |
 | S-10 | Recipe scaler | Scale ingredient quantities by servings | New tool, Cooking-ish group or Time |
+| S-11 | Home screen UI mode | **Cards (current) / List** display toggle in Settings, persisted | Affects `HomeScreen`; keep both layouts |
+| S-12 | AdMob ads | Banner on home + occasional interstitial between tools; **test ad units in debug**, real units in release | New deps (user-requested): `play-services-ads`; wiring + consent flow |
+| S-13 | One-time "Pro" paywall | Single in-app purchase: **removes ads + lifts free-tier limits** | New deps (user-requested): `billing-client`; see Monetization track below |
+
+## 💰 Monetization track (S-12, S-13)
+
+Requested by the user (2026-11-10). Shape:
+
+- **Free tier**: all tools usable, ads shown, soft caps on "collection" tools
+  (e.g. max 5 notes, 5 countdown events, 20 fuel entries — exact caps set at
+  implementation time).
+- **Pro (one-time purchase)**: removes all ads + lifts every cap.
+  No subscriptions. Purchase state stored via Play Billing + local flag.
+- **AdMob**: banner on home screen, interstitial at low frequency (never
+  inside a tool flow). Debug builds must use Google **test ad unit IDs**.
+- **Constraint**: purchases/ads only function in a Play-distributed build —
+  **S-12/S-13 land after or alongside D-03 (Play Store release)**. Billing
+  plumbing can be built earlier against the Play Billing test flow.
 
 ## 🔵 Deferred — waiting on a decision
 
@@ -39,7 +57,7 @@ forward-looking plan only).
 |---|---|---|---|
 | D-01 | **Password manager** (vault) | User decision (deferred since v2) | Password *generator* already ships in Randomizer |
 | D-02 | Currency conversions | Online rates → breaks "offline-first" vow | Need user decision: on-device rates file vs network |
-| D-03 | Play Store release | Publishing intent | `bundleRelease` + signing are ready (v6); needs listing assets, screenshots, privacy policy |
+| D-03 | Play Store release | Publishing intent | **Now blocking S-12/S-13** (ads + IAP need Play distribution). `bundleRelease` + signing are ready (v6); needs listing assets, screenshots, privacy policy |
 | D-04 | Localization | Scope decision | UI strings are inline English today (single-language app by design) |
 
 ## ⚪ Candidates — unconfirmed ideas
@@ -69,10 +87,12 @@ forward-looking plan only).
 
 ## Suggested build order
 
-1. **S-01** (refactor, unlocks faster tool work) → **S-02 → S-03 → S-04**
-   (tool polish)
+1. **S-01** (refactor, unlocks faster tool work) → **S-11** (home UI modes,
+   pure UI) → **S-02 → S-03 → S-04** (tool polish)
 2. **S-05 → S-06 → S-07 → S-08 → S-09 → S-10** (new features)
-3. Then revisit **D-02 / D-03** once the user weighs in.
+3. **Monetization**: S-12 + S-13 together (shared "Pro" state gate), ideally
+   once D-03 is unblocked — confirm the Play release path first.
+4. Then revisit **D-02 / D-04** once the user weighs in.
 
 ---
 
