@@ -1,0 +1,155 @@
+================================================================================
+AD-MOB.TXT — AdMob integration recipe for The Needed Utility (S-12)
+================================================================================
+Purpose: everything needed to wire banner + interstitial ads into the app in
+one pass. Prepared 2026-11-10. When implementing S-12, follow this file top
+to bottom — it assumes the codebase state at v7.
+
+User-specified behavior (2026-11-10):
+  * Banner ad on the home screen.
+  * Full-screen (interstitial) ad triggers when switching to a tool for the
+    5th time. "Switch" = any navigation from home into a tool screen.
+    Closing and re-opening the SAME tool also counts as a switch.
+    So: every 5th tool open (5th, 10th, 15th, ...) shows the interstitial.
+
+Pro gate: when S-13 lands, ALL of this is skipped for Pro users
+(see section 7). Keep the gate in mind while wiring.
+
+--------------------------------------------------------------------------------
+1. DEPENDENCIES (add to gradle/libs.versions.toml + app/build.gradle.kts)
+--------------------------------------------------------------------------------
+[versions]
+playServicesAds = "25.5.0"      # verified 2026-11-10 on Google Maven
+billing = "9.1.0"               # for S-13 (Pro paywall), not needed for S-12
+
+[libraries]
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
+billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }   # S-13
+
+app/build.gradle.kts dependencies:
+    implementation(libs.play.services.ads)
+    // implementation(libs.billing)   <- uncomment with S-13
+
+NOTE: play-services-ads pulls in a large transitive graph. This is a
+deliberate, user-approved exception to the minimal-dependency rule.
+
+--------------------------------------------------------------------------------
+2. MANIFEST (app/src/main/AndroidManifest.xml)
+--------------------------------------------------------------------------------
+Permissions:
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- already present: VIBRATE, POST_NOTIFICATIONS, CAMERA, RECEIVE_BOOT_COMPLETED -->
+
+Inside <application>, BEFORE <activity>:
+    <!-- AdMob App ID: TEST app id while developing.
+         Replace with the real AdMob app id before release. -->
+    <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-3940256099942544~3347511713" />
+
+--------------------------------------------------------------------------------
+3. AD UNIT IDs
+--------------------------------------------------------------------------------
+                              TEST (debug)                          REAL (release)
+Banner        ca-app-pub-3940256099942544/6300978111    <- replace with real unit
+Interstitial  ca-app-pub-3940256099942544/1033173712    <- replace with real unit
+
+(These are Google's official sample ad unit IDs — always safe in debug.)
+Recommended: BuildConfig field or a small `Ads.kt` object that returns the
+test ID when BuildConfig.DEBUG, real ID otherwise. NEVER ship test IDs in
+release and never click real ads yourself (AdMob policy).
+
+--------------------------------------------------------------------------------
+4. ARCHITECTURE — new file: app/src/main/java/.../monetization/Ads.kt
+--------------------------------------------------------------------------------
+Create `monetization/` package with one object, e.g.:
+
+    object AdManager {
+        // --- interstitial frequency rule ---
+        private var toolOpenCount: Int = 0        // in-memory, per app session
+        const val INTERSTITIAL_EVERY = 5
+
+        fun onToolOpened(): Boolean {             // call on EVERY tool navigation
+            toolOpenCount++
+            return toolOpenCount % INTERSTITIAL_EVERY == 0   // -> show ad
+        }
+
+        // --- interstitial loading ---
+        // Load eagerly after app start AND after each show (ads are one-shot).
+        // lateinit InterstitialAd + AdRequest; full-screen content callback
+        // navigates/restores state after dismissal.
+
+        @Composable
+        fun HomeBanner(modifier: Modifier = Modifier) {
+            // AndroidView(factory = { AdView(it).apply {
+            //   adUnitId = BANNER_ID; setAdSize(AdSize.BANNER); loadAd(AdRequest) } })
+        }
+    }
+
+Notes:
+  * Tool-open counter is SESSION-scoped (in-memory). "Closing and opening
+    the same tool counts as a switch" is satisfied because every call to
+    onToolOpened() counts, regardless of which tool.
+  * Interstitial show timing: load before needed (never on main-thread
+    block); if not loaded when due, skip silently (never block navigation).
+  * After each show, immediately request the next interstitial.
+
+--------------------------------------------------------------------------------
+5. INSERTION POINTS (existing files)
+--------------------------------------------------------------------------------
+a) NeededUtilityApp.kt — the HOME composable route:
+       onToolClick = { tool ->
+           val showAd = AdManager.onToolOpened()
+           navController.navigate(tool.route)
+           if (showAd) AdManager.showInterstitialIfReady(activity)
+       }
+   (Every tool entry goes through onToolClick — home -> tool only. This is
+    exactly the "switch" the user described; re-entering re-triggers it.)
+
+b) ui/home/HomeScreen.kt — banner placement:
+       Add `AdManager.HomeBanner()` at the BOTTOM of the Scaffold content
+       (below the LazyColumn, inside the Scaffold's content lambda), so it
+       sits above the system nav bar and never overlaps the tool grid.
+
+c) MainActivity.kt — initialize Mobile Ads SDK once:
+       MobileAds.initialize(this)   // in onCreate
+       (needed for both banner and interstitial)
+
+d) AndroidManifest.xml — see section 2.
+
+--------------------------------------------------------------------------------
+6. FREQUENCY / UX RULES (AdMob policy + user spec)
+--------------------------------------------------------------------------------
+  * Show interstitial on every 5th tool open (5, 10, 15, ...).
+  * Never show an interstitial twice in a row for the same trigger; never
+    on app cold start; never inside a tool flow (only on switch).
+  * Ads must never overlap tool content; banner only on home.
+  * User must always be able to close interstitials (system back works).
+  * If AdManager fails to load, the app must behave exactly as before
+    (offline-first promise still holds for all tools).
+
+--------------------------------------------------------------------------------
+7. PRO GATE (coordinate with S-13)
+--------------------------------------------------------------------------------
+    if (!isPro) { ... show ads ... }
+
+  * isPro from BillingManager (S-13) / local flag cached in DataStore.
+  * Pro users: no banner (hide the composable entirely), no interstitials,
+    and free-tier caps lifted (25 notes / 25 events / 100 entries).
+
+--------------------------------------------------------------------------------
+8. CHECKLIST FOR IMPLEMENTATION
+--------------------------------------------------------------------------------
+  [ ] Add deps (section 1) and manifest bits (section 2)
+  [ ] Ads.kt with AdManager (section 4)
+  [ ] MobileAds.initialize in MainActivity
+  [ ] Wire onToolOpened() in NeededUtilityApp.onToolClick (section 5a)
+  [ ] HomeBanner at bottom of HomeScreen (section 5b)
+  [ ] Test IDs in debug; real IDs behind !BuildConfig.DEBUG
+  [ ] Interstitial: load-on-start + reload-after-show
+  [ ] Manual test: tap tools and confirm ad on 5th/10th switch,
+      including re-opening the same tool (must count)
+  [ ] Verify offline behavior: no crash / no blank UI without network
+  [ ] When S-13 lands: gate everything behind isPro (section 7)
+
+================================================================================

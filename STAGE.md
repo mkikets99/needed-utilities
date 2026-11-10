@@ -46,7 +46,7 @@ forward-looking plan only).
 
 | ID | Item | Description | Notes |
 |---|---|---|---|
-| S-12 | AdMob ads | Banner on home + low-frequency interstitial; **test ad units in debug** | Deps pre-approved: `play-services-ads` |
+| S-12 | AdMob ads | Banner on home + interstitial **every 5th tool switch** (re-opening same tool counts); **test ad units in debug** | Recipe ready in `ad-mob.txt` (deps, manifest, insertion points); deps pre-approved: `play-services-ads` |
 | S-13 | One-time "Pro" paywall | Removes ads + lifts free-tier caps | Deps pre-approved: `billing-client`; **generous caps: 25 notes / 25 events / 100 entries** |
 
 > Publish-to-Play is **not** required to build S-12/S-13 — use test ads and
@@ -58,8 +58,9 @@ forward-looking plan only).
   25 countdown events, 100 fuel/trip entries).
 - **Pro (one-time purchase)**: removes all ads + lifts every cap. No
   subscriptions. One shared `isPro` gate for S-12 + S-13.
-- **AdMob**: banner on home, interstitial at low frequency (never inside a
-  tool flow). Debug builds must use Google **test ad unit IDs**.
+- **AdMob**: banner on home, interstitial **every 5th tool switch** (any tool
+  open counts, including re-opening the same tool). Debug builds must use
+  Google **test ad unit IDs**. Full recipe: `ad-mob.txt`.
 
 ## 🔵 Deferred
 
