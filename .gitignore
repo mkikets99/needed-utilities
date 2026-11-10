@@ -12,3 +12,6 @@ captures/
 *.hprof
 keystore/
 keystore.properties
+.opencode.txt
+ad-mob.txt
+AGENTS.md
