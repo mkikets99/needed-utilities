@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.github.mkikets99.neededutility.ui.common.ResultRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,21 +97,6 @@ fun DiscountScreen(onBack: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun ResultRow(label: String, value: Double) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
-        Text(
-            text = formatAmount(value),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
     }
 }
 

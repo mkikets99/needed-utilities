@@ -45,6 +45,7 @@ app/src/main/java/com/github/mkikets99/neededutility/
 │   ├── metronome/               # Metronome screen (ToneGenerator)
 │   └── morse/                   # MorseCodec.kt + screen
 └── ui/
+    ├── common/CommonComponents.kt  # shared ResultRow / ResultRowText
     ├── home/HomeScreen.kt       # grouped, extensible tool grid
     ├── settings/SettingsScreen.kt
     └── theme/Theme.kt           # M3 + dynamic color
@@ -66,6 +67,8 @@ is connected, build-only is the accepted fallback.
 
 - **Pure logic goes in plain Kotlin classes** (e.g. `CalculatorEngine`,
   `UnitConverter`) with unit tests in `app/src/test/`. Screens stay thin.
+- **Use `ui/common/CommonComponents.kt`** (`ResultRow`, `ResultRowText`) for
+  label/value result rows instead of private copies.
 - **Adding a tool** = 3 steps: create `tools/<name>/` with logic + screen,
   add an entry to `ToolRegistry`, add a route in `NeededUtilityApp.kt`.
   The home screen picks it up automatically (grouped by `ToolGroup`).

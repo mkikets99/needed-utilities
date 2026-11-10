@@ -1,16 +1,16 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v3-complete",
+  "phase": "v4-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "Offline-first multi-tool toolbox with 21 tools across 7 groups (converter, calculator+history, percentage, base converter, tip & split, discount, loan EMI, unit price, BMI, notes, text toolkit, stopwatch & timer with vibration+notification, world clock, flashlight, QR scanner+history, QR generator, compass, bubble level, randomizer with password strength, metronome, morse). Material 3 + Material You, AGP 9 built-in Kotlin, zero warnings, 60 unit tests green.",
+  "summary": "Offline-first multi-tool toolbox with 30 tools across 7 groups. v4 added date diff, countdown events, age calculator, BMR calories, fuel calculator, savings & interest, electricity cost, roman numerals, color converter, plus notes search, calculator history copy-all and dice types. Shared ResultRow extracted to ui/common. 93 unit tests green, zero warnings.",
   "nextSteps": [
     "Password manager tool (deferred; generator already in Randomizer)",
-    "Converter favorites, calculator history export",
-    "More tool candidates: date diff, countdown-to-date, fuel efficiency, note search",
+    "Countdown notifications like the timer; date picker polish",
+    "More candidates: cooking presets, trip expenses, note tags, tip rounding",
     "Release signing config + first signed build",
-    "Extract shared composables (result rows, input fields) into ui/common"
+    "Further shared composables extraction (input fields, top bars)"
   ],
   "lastUpdated": "2026-11-10"
 }

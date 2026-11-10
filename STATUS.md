@@ -10,25 +10,24 @@ time, organized in groups.
 
 ## Current state
 
-v3 complete and building. **21 tools** on the extensible grouped home screen:
+v4 complete and building. **30 tools** on the extensible grouped home screen:
 
-- **Calculations:** Unit Converter, Calculator (now with history),
-  Percentage, Base Converter
-- **Money:** Tip & Split, Discount, Loan (EMI), Unit Price
-- **Health:** BMI Calculator
-- **Productivity:** Notes (DataStore + JSON), Text Toolkit
-- **Time:** Stopwatch & Timer (vibration + notification), World Clock
-- **Device:** Flashlight, QR Scanner (with scan history), QR Generator,
+- **Calculations:** Unit Converter, Calculator (+ history, copy-all),
+  Percentage, Base Converter, Roman Numerals, Color Converter
+- **Money:** Tip & Split, Discount, Loan (EMI), Unit Price, Fuel Calculator,
+  Savings & Interest, Electricity Cost
+- **Health:** BMI Calculator, Age Calculator, Daily Calories (BMR)
+- **Productivity:** Notes (search, DataStore + JSON), Text Toolkit
+- **Time:** Stopwatch & Timer (vibration + notification), World Clock,
+  Date Diff, Countdown (named events, live countdown)
+- **Device:** Flashlight, QR Scanner (+ scan history), QR Generator,
   Compass, Bubble Level
-- **Fun & Random:** Randomizer (dice, coin, numbers, password generator with
-  strength meter), Metronome, Morse Code
+- **Fun & Random:** Randomizer (dice d4–d20, coin, numbers, password
+  generator + strength), Metronome, Morse Code
 
-App shell: Material 3 + Material You dynamic colors, dark mode + theme
-settings (persisted), Navigation Compose, DataStore light persistence.
-Package `com.github.mkikets99.neededutility`, minSdk 29 / targetSdk 37.
-
-Previously smoke-tested on a physical device (Samsung Galaxy S24 Ultra,
-Android 17) at v1; v3 is build-verified (device was disconnected).
+App shell: Material 3 + Material You, dark mode + theme settings,
+Navigation Compose, DataStore light persistence. Package
+`com.github.mkikets99.neededutility`, minSdk 29 / targetSdk 37.
 
 ## Build status
 
@@ -36,29 +35,28 @@ Android 17) at v1; v3 is build-verified (device was disconnected).
 lint) with zero compiler warnings. Verified 2026-11-10 on Windows with JDK 27,
 Gradle 9.8.2, AGP 9.5.1 (built-in Kotlin), Android SDK platform 37.
 
-Unit tests: **60** across 9 test classes (engine, converter, percentage,
-bases, loan, unit price, BMI, text, morse, password strength) — all green.
-The tests caught and fixed a real `titleCase` whitespace bug during development.
+Unit tests: **93** across 18 test classes — all green. Tests caught real bugs
+(titleCase whitespace in v3; wrong age-test expectation in v4 before build).
+
+## Refactoring
+
+`ui/common/CommonComponents.kt` now hosts the shared `ResultRow` /
+`ResultRowText` components; 9 calculator-style screens were deduplicated.
+**New tool screens must use these instead of private copies.**
 
 ## Known issues / TODO
 
-- Lint is non-fatal; hardcoded UI strings produce warnings (single-language
-  app — accepted).
-- Notes are stored as one JSON blob — fine for small lists (Room is the
-  upgrade path if needed).
-- Metronome timing uses `delay()` — accurate enough for practice, not for
-  professional musicians.
-- Compass/level accuracy depends on device sensors; no calibration UI yet.
-- No instrumented/UI tests.
-- Release build is unsigned (no release signing config yet).
+- Lint is non-fatal; hardcoded UI strings produce warnings (accepted).
+- Notes stored as one JSON blob (Room is the upgrade path if lists grow).
+- Metronome timing uses `delay()` — practice-grade, not pro-grade.
+- Sensor tools (compass/level) have no calibration UI yet.
+- No instrumented/UI tests; release build is unsigned.
 
 ## Next steps
 
-1. **Password manager** (deferred by user decision) — vault-style tool;
-   the password *generator* already ships inside Randomizer.
-2. Converter favorites; calculator history export/copy.
-3. More candidates: date diff / countdown-to-date, cooking timer presets,
-   fuel efficiency, tip history, note search/tags.
+1. **Password manager** (deferred by user decision).
+2. Date picker UX polish; countdown notifications (like the timer).
+3. More candidates: cooking timer presets, trip expense tracker, note tags,
+   QR history search, tip rounding.
 4. Release signing config + first signed build.
-5. Shared composables extraction (result rows, input fields) — the pattern
-   has now repeated 10+ times.
+5. Further shared extraction (input fields, top bars) as tools keep growing.

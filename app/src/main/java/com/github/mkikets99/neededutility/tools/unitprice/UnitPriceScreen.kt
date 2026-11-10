@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.github.mkikets99.neededutility.ui.common.ResultRowText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,8 +70,8 @@ fun UnitPriceScreen(onBack: () -> Unit) {
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    ResultRow("Unit price A", result?.unitPriceA)
-                    ResultRow("Unit price B", result?.unitPriceB)
+                    ResultRowText("Unit price A", formatUnitPrice(result?.unitPriceA))
+                    ResultRowText("Unit price B", formatUnitPrice(result?.unitPriceB))
                     Text(
                         text = when {
                             result == null -> "Enter price and quantity for both packs."
@@ -123,17 +124,5 @@ private fun PackCard(
     }
 }
 
-@Composable
-private fun ResultRow(label: String, value: Double?) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
-        Text(
-            text = value?.let { String.format("%.4f", it).trimEnd('0').trimEnd('.') } ?: "—",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
-}
+private fun formatUnitPrice(value: Double?): String =
+    value?.let { String.format("%.4f", it).trimEnd('0').trimEnd('.') } ?: "—"

@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.github.mkikets99.neededutility.ui.common.ResultRowText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,8 +109,8 @@ fun ColorScreen(onBack: () -> Unit) {
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    ResultRow("Hex", ColorConverter.toHex(red.toInt(), green.toInt(), blue.toInt()))
-                    ResultRow("RGB", "${red.toInt()}, ${green.toInt()}, ${blue.toInt()}")
+                    ResultRowText("Hex", ColorConverter.toHex(red.toInt(), green.toInt(), blue.toInt()))
+                    ResultRowText("RGB", "${red.toInt()}, ${green.toInt()}, ${blue.toInt()}")
                 }
             }
         }
@@ -138,17 +139,4 @@ private fun SliderRow(label: String, value: Float, onChange: (Float) -> Unit) {
     }
 }
 
-@Composable
-private fun ResultRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
-}
+

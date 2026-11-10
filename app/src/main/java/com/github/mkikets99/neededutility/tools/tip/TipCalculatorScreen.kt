@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.github.mkikets99.neededutility.data.ToolPreferences
+import com.github.mkikets99.neededutility.ui.common.ResultRow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,17 +160,4 @@ fun TipCalculatorScreen(
     }
 }
 
-@Composable
-private fun ResultRow(label: String, value: Double) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
-        Text(
-            text = String.format("%.2f", value),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
-}
+
