@@ -65,7 +65,8 @@ Builds fall back to debug signing when no keystore is present.
 
 - **Play Console setup pending** (D-03): billing requires a managed product
   with id `pro`; until defined, purchases no-op gracefully. Real ad units
-  are already in `ad-mob.txt`.
+  are already in `ad-mob.txt`. Privacy policy drafted
+  (`PRIVACY_POLICY.md`) — host it at a public URL before submission.
 - Countdown alarms are inexact; a permission prompt for exact alarms could
   be added later (Android 12+ SCHEDULE_EXACT_ALARM).
 - Lint is non-fatal; hardcoded UI strings produce warnings (accepted).

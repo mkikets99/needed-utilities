@@ -106,7 +106,7 @@ All reviewed 2026-11-10 and **approved as candidates**:
 | T-03 | Keep zero compiler warnings + all tests green as hard gate | `./gradlew build` |
 | T-04 | Instrumented/UI tests (Compose testing) | Currently only JVM unit tests |
 | T-05 | CI build (GitHub Actions) | No remote yet |
-| T-06 | Privacy policy draft | Required before Play release (ads, IAP, mic/camera tools) |
+| T-06 | Privacy policy draft | ✅ drafted `PRIVACY_POLICY.md` (2026-11-10) — **needs hosting at a public URL before Play submission** (GitHub Pages suggested) |
 
 ## Suggested build order
 
