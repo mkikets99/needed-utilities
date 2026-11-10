@@ -25,21 +25,29 @@ import com.github.mkikets99.neededutility.tools.countdown.CountdownScreen
 import com.github.mkikets99.neededutility.tools.datediff.DateDiffScreen
 import com.github.mkikets99.neededutility.tools.discount.DiscountScreen
 import com.github.mkikets99.neededutility.tools.electricity.ElectricityScreen
+import com.github.mkikets99.neededutility.tools.fractions.FractionScreen
 import com.github.mkikets99.neededutility.tools.fuel.FuelScreen
+import com.github.mkikets99.neededutility.tools.geometry.GeometryScreen
+import com.github.mkikets99.neededutility.tools.gpa.GpaScreen
 import com.github.mkikets99.neededutility.tools.level.LevelScreen
 import com.github.mkikets99.neededutility.tools.loan.LoanScreen
 import com.github.mkikets99.neededutility.tools.metronome.MetronomeScreen
 import com.github.mkikets99.neededutility.tools.morse.MorseScreen
 import com.github.mkikets99.neededutility.tools.notes.NotesScreen
 import com.github.mkikets99.neededutility.tools.percentage.PercentageScreen
+import com.github.mkikets99.neededutility.tools.prime.PrimeScreen
 import com.github.mkikets99.neededutility.tools.qr.QrGeneratorScreen
 import com.github.mkikets99.neededutility.tools.qr.QrScannerScreen
 import com.github.mkikets99.neededutility.tools.randomizer.RandomizerScreen
 import com.github.mkikets99.neededutility.tools.roman.RomanScreen
 import com.github.mkikets99.neededutility.tools.savings.SavingsScreen
+import com.github.mkikets99.neededutility.tools.speed.SpeedScreen
 import com.github.mkikets99.neededutility.tools.stopwatch.StopwatchScreen
+import com.github.mkikets99.neededutility.tools.sunrise.SunriseScreen
+import com.github.mkikets99.neededutility.tools.teams.TeamSplitterScreen
 import com.github.mkikets99.neededutility.tools.text.TextToolkitScreen
 import com.github.mkikets99.neededutility.tools.torch.TorchScreen
+import com.github.mkikets99.neededutility.tools.trip.TripScreen
 import com.github.mkikets99.neededutility.tools.tip.TipCalculatorScreen
 import com.github.mkikets99.neededutility.tools.unitprice.UnitPriceScreen
 import com.github.mkikets99.neededutility.tools.worldclock.WorldClockScreen
@@ -55,6 +63,14 @@ object Routes {
     const val BASES = "bases"
     const val ROMAN = "roman"
     const val COLOR = "color"
+    const val SPEED = "speed"
+    const val FRACTIONS = "fractions"
+    const val GEOMETRY = "geometry"
+    const val PRIMES = "primes"
+    const val GPA = "gpa"
+    const val TRIP = "trip"
+    const val SUNRISE = "sunrise"
+    const val TEAMS = "teams"
     const val TIP = "tip"
     const val DISCOUNT = "discount"
     const val LOAN = "loan"
@@ -127,6 +143,18 @@ fun NeededUtilityApp() {
             composable(Routes.COLOR) {
                 ColorScreen(onBack = { navController.popBackStack() })
             }
+            composable(Routes.SPEED) {
+                SpeedScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.FRACTIONS) {
+                FractionScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.GEOMETRY) {
+                GeometryScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.PRIMES) {
+                PrimeScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.TIP) {
                 TipCalculatorScreen(
                     onBack = { navController.popBackStack() },
@@ -151,6 +179,9 @@ fun NeededUtilityApp() {
             composable(Routes.ELECTRICITY) {
                 ElectricityScreen(onBack = { navController.popBackStack() })
             }
+            composable(Routes.TRIP) {
+                TripScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.BMI) {
                 BmiScreen(onBack = { navController.popBackStack() })
             }
@@ -159,6 +190,9 @@ fun NeededUtilityApp() {
             }
             composable(Routes.BMR) {
                 BmrScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.GPA) {
+                GpaScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.NOTES) {
                 NotesScreen(onBack = { navController.popBackStack() })
@@ -177,6 +211,9 @@ fun NeededUtilityApp() {
             }
             composable(Routes.COUNTDOWN) {
                 CountdownScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.SUNRISE) {
+                SunriseScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.TORCH) {
                 TorchScreen(onBack = { navController.popBackStack() })
@@ -201,6 +238,9 @@ fun NeededUtilityApp() {
             }
             composable(Routes.MORSE) {
                 MorseScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.TEAMS) {
+                TeamSplitterScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.SETTINGS) {
                 SettingsScreen(

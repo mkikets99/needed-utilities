@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -35,13 +38,27 @@ import com.google.zxing.qrcode.QRCodeWriter
 
 private const val QR_SIZE = 512
 
+private enum class QrMode(val label: String) {
+    TEXT("Text / URL"),
+    WIFI("WiFi network"),
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QrGeneratorScreen(onBack: () -> Unit) {
+    var mode by remember { mutableStateOf(QrMode.TEXT) }
     var text by remember { mutableStateOf("") }
-    val bitmap = remember(text) {
-        if (text.isBlank()) null
-        else runCatching { encodeQr(text, QR_SIZE) }.getOrNull()
+    var ssid by remember { mutableStateOf("") }
+    var wifiPassword by remember { mutableStateOf("") }
+    var hidden by remember { mutableStateOf(false) }
+
+    val payload = when (mode) {
+        QrMode.TEXT -> text
+        QrMode.WIFI -> WifiQr.build(ssid, wifiPassword, hidden)
+    }
+    val bitmap = remember(payload) {
+        if (payload.isBlank()) null
+        else runCatching { encodeQr(payload, QR_SIZE) }.getOrNull()
     }
 
     Scaffold(
@@ -64,12 +81,51 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Text or URL") },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                QrMode.entries.forEach { entry ->
+                    FilterChip(
+                        selected = mode == entry,
+                        onClick = { mode = entry },
+                        label = { Text(entry.label) },
+                    )
+                }
+            }
+
+            when (mode) {
+                QrMode.TEXT -> {
+                    OutlinedTextField(
+                        value = text,
+                        onValueChange = { text = it },
+                        label = { Text("Text or URL") },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+
+                QrMode.WIFI -> {
+                    OutlinedTextField(
+                        value = ssid,
+                        onValueChange = { ssid = it },
+                        label = { Text("Network name (SSID)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OutlinedTextField(
+                        value = wifiPassword,
+                        onValueChange = { wifiPassword = it },
+                        label = { Text("Password (empty = open network)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text("Hidden network")
+                        Switch(checked = hidden, onCheckedChange = { hidden = it })
+                    }
+                }
+            }
 
             if (bitmap != null) {
                 Column(
@@ -82,14 +138,20 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
                         modifier = Modifier.size(256.dp),
                     )
                     Text(
-                        text = "QR code for ${text.length} character(s)",
+                        text = when (mode) {
+                            QrMode.TEXT -> "QR code for ${text.length} character(s)"
+                            QrMode.WIFI -> "WiFi QR for \"${ssid.ifBlank { "network" }}\" — scan to join"
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             } else {
                 Text(
-                    text = "Type something to generate a QR code.",
+                    text = when (mode) {
+                        QrMode.TEXT -> "Type something to generate a QR code."
+                        QrMode.WIFI -> "Enter an SSID to generate a WiFi QR code."
+                    },
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }

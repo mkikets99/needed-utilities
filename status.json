@@ -1,16 +1,16 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v4-complete",
+  "phase": "v5-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "Offline-first multi-tool toolbox with 30 tools across 7 groups. v4 added date diff, countdown events, age calculator, BMR calories, fuel calculator, savings & interest, electricity cost, roman numerals, color converter, plus notes search, calculator history copy-all and dice types. Shared ResultRow extracted to ui/common. 93 unit tests green, zero warnings.",
+  "summary": "Offline-first multi-tool toolbox with 38 tools across 7 groups. v5 added speed-distance-time, fractions, geometry, prime checker, GPA, trip & expenses, sunrise & sunset (NOAA equation), team splitter, plus timer presets, tip rounding, note tags, WiFi QR mode and scan-history search. 139 unit tests green, zero warnings.",
   "nextSteps": [
     "Password manager tool (deferred; generator already in Randomizer)",
-    "Countdown notifications like the timer; date picker polish",
-    "More candidates: cooking presets, trip expenses, note tags, tip rounding",
+    "Countdown notifications; tag chips filter for notes",
+    "Candidates: cooking presets, fuel log, converter favorites, QR history export",
     "Release signing config + first signed build",
-    "Further shared composables extraction (input fields, top bars)"
+    "More shared composables extraction (input fields, top bars)"
   ],
   "lastUpdated": "2026-11-10"
 }

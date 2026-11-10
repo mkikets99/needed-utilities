@@ -33,6 +33,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -252,6 +253,23 @@ private fun TimerTab() {
                 enabled = !running,
                 modifier = Modifier.weight(1f),
             )
+        }
+
+        Text("Quick presets", style = MaterialTheme.typography.titleSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf(1, 2, 5, 10, 15, 30).forEach { minutes ->
+                OutlinedButton(
+                    onClick = {
+                        running = false
+                        minutesInput = minutes.toString()
+                        secondsInput = "0"
+                        remainingMs = minutes * 60_000L
+                    },
+                    enabled = !running,
+                ) {
+                    Text("${minutes}m")
+                }
+            }
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

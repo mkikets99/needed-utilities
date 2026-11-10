@@ -14,6 +14,7 @@ data class Note(
     val title: String,
     val body: String,
     val updatedAt: Long,
+    val tag: String = "",
 )
 
 private val Context.notesDataStore by preferencesDataStore(name = "notes")
@@ -52,6 +53,7 @@ class NotesRepository(private val context: Context) {
                     .put("title", note.title)
                     .put("body", note.body)
                     .put("updatedAt", note.updatedAt)
+                    .put("tag", note.tag)
             )
         }
         return array.toString()
@@ -70,6 +72,7 @@ class NotesRepository(private val context: Context) {
                             title = obj.optString("title"),
                             body = obj.optString("body"),
                             updatedAt = obj.optLong("updatedAt"),
+                            tag = obj.optString("tag"),
                         )
                     )
                 }

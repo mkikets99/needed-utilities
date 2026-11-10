@@ -2,20 +2,25 @@ package com.github.mkikets99.neededutility.tools
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.filled.ChangeHistory
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FlashlightOn
 import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material.icons.filled.Functions
 import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.HourglassBottom
-import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.LocalGasStation
+import androidx.compose.material.icons.filled.LooksOne
+import androidx.compose.material.icons.filled.Luggage
 import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Payments
@@ -25,12 +30,15 @@ import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Savings
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.SortByAlpha
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -117,6 +125,38 @@ object ToolRegistry {
             route = "color",
         ),
         Tool(
+            id = "speed_distance_time",
+            title = "Speed · Distance · Time",
+            description = "Any two → third",
+            icon = Icons.Filled.Speed,
+            group = ToolGroup.CALCULATIONS,
+            route = "speed",
+        ),
+        Tool(
+            id = "fractions",
+            title = "Fractions",
+            description = "Fraction ↔ decimal",
+            icon = Icons.Filled.Functions,
+            group = ToolGroup.CALCULATIONS,
+            route = "fractions",
+        ),
+        Tool(
+            id = "geometry",
+            title = "Geometry",
+            description = "Areas & perimeters",
+            icon = Icons.Filled.ChangeHistory,
+            group = ToolGroup.CALCULATIONS,
+            route = "geometry",
+        ),
+        Tool(
+            id = "prime_checker",
+            title = "Prime Checker",
+            description = "Primes & factorization",
+            icon = Icons.Filled.LooksOne,
+            group = ToolGroup.CALCULATIONS,
+            route = "primes",
+        ),
+        Tool(
             id = "tip_splitter",
             title = "Tip & Split",
             description = "Tip and bill splitting",
@@ -173,6 +213,14 @@ object ToolRegistry {
             route = "electricity",
         ),
         Tool(
+            id = "trip_expenses",
+            title = "Trip & Expenses",
+            description = "Track & split costs",
+            icon = Icons.Filled.Luggage,
+            group = ToolGroup.MONEY,
+            route = "trip",
+        ),
+        Tool(
             id = "bmi",
             title = "BMI Calculator",
             description = "Body mass index & range",
@@ -213,6 +261,14 @@ object ToolRegistry {
             route = "text",
         ),
         Tool(
+            id = "gpa",
+            title = "GPA Calculator",
+            description = "US 4.0 weighted GPA",
+            icon = Icons.Filled.School,
+            group = ToolGroup.PRODUCTIVITY,
+            route = "gpa",
+        ),
+        Tool(
             id = "stopwatch_timer",
             title = "Stopwatch & Timer",
             description = "Count up or count down",
@@ -243,6 +299,14 @@ object ToolRegistry {
             icon = Icons.Filled.HourglassBottom,
             group = ToolGroup.TIME,
             route = "countdown",
+        ),
+        Tool(
+            id = "sunrise",
+            title = "Sunrise & Sunset",
+            description = "Solar times anywhere",
+            icon = Icons.Filled.WbTwilight,
+            group = ToolGroup.TIME,
+            route = "sunrise",
         ),
         Tool(
             id = "torch",
@@ -307,6 +371,14 @@ object ToolRegistry {
             icon = Icons.Filled.Code,
             group = ToolGroup.FUN,
             route = "morse",
+        ),
+        Tool(
+            id = "team_splitter",
+            title = "Team Splitter",
+            description = "Random balanced teams",
+            icon = Icons.Filled.Groups,
+            group = ToolGroup.FUN,
+            route = "teams",
         ),
     )
 }

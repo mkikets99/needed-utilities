@@ -57,7 +57,8 @@ fun NotesScreen(onBack: () -> Unit) {
     } else {
         notes.filter {
             it.title.contains(query, ignoreCase = true) ||
-                it.body.contains(query, ignoreCase = true)
+                it.body.contains(query, ignoreCase = true) ||
+                it.tag.contains(query, ignoreCase = true)
         }
     }
 
@@ -133,6 +134,14 @@ fun NotesScreen(onBack: () -> Unit) {
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )
+                            if (note.tag.isNotBlank()) {
+                                Text(
+                                    text = "#${note.tag}",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                )
+                            }
                             if (note.body.isNotBlank()) {
                                 Text(
                                     text = note.body,
@@ -157,10 +166,10 @@ fun NotesScreen(onBack: () -> Unit) {
         }
     }
 
-    if (showDialog) {
+            if (showDialog) {
         NoteDialog(
             note = editing,
-            onSave = { title, body ->
+            onSave = { title, body, tag ->
                 val existing = editing
                 scope.launch {
                     repository.upsert(
@@ -169,6 +178,7 @@ fun NotesScreen(onBack: () -> Unit) {
                             title = title,
                             body = body,
                             updatedAt = System.currentTimeMillis(),
+                            tag = tag,
                         )
                     )
                 }
@@ -186,12 +196,13 @@ fun NotesScreen(onBack: () -> Unit) {
 @Composable
 private fun NoteDialog(
     note: Note?,
-    onSave: (title: String, body: String) -> Unit,
+    onSave: (title: String, body: String, tag: String) -> Unit,
     onDelete: (Note) -> Unit,
     onDismiss: () -> Unit,
 ) {
     var title by remember { mutableStateOf(note?.title ?: "") }
     var body by remember { mutableStateOf(note?.body ?: "") }
+    var tag by remember { mutableStateOf(note?.tag ?: "") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -211,11 +222,18 @@ private fun NoteDialog(
                     label = { Text("Note") },
                     modifier = Modifier.fillMaxWidth(),
                 )
+                OutlinedTextField(
+                    value = tag,
+                    onValueChange = { tag = it },
+                    label = { Text("Tag (optional)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         },
         confirmButton = {
             TextButton(
-                onClick = { onSave(title, body) },
+                onClick = { onSave(title, body, tag) },
                 enabled = title.isNotBlank() || body.isNotBlank(),
             ) {
                 Text("Save")

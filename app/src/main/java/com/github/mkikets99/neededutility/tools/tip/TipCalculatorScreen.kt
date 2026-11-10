@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.github.mkikets99.neededutility.data.ToolPreferences
 import com.github.mkikets99.neededutility.ui.common.ResultRow
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +53,7 @@ fun TipCalculatorScreen(
     var billInput by remember { mutableStateOf("") }
     var tipPercent by remember { mutableFloatStateOf(15f) }
     var splitCount by remember { mutableIntStateOf(1) }
+    var roundUpUnit by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         preferences.tipPercent.collect { tipPercent = it.toFloat() }
@@ -61,8 +63,14 @@ fun TipCalculatorScreen(
     }
 
     val bill = billInput.toDoubleOrNull() ?: 0.0
-    val tip = bill * tipPercent / 100.0
-    val total = bill + tip
+    val rawTip = bill * tipPercent / 100.0
+    val rawTotal = bill + rawTip
+    val (tip, total) = if (roundUpUnit > 0 && bill > 0.0) {
+        val rounded = ceil(rawTotal / roundUpUnit) * roundUpUnit
+        (rounded - bill) to rounded
+    } else {
+        rawTip to rawTotal
+    }
     val perPerson = if (splitCount > 0) total / splitCount else total
 
     Scaffold(
@@ -113,6 +121,17 @@ fun TipCalculatorScreen(
                             scope.launch { preferences.setTipPercent(preset) }
                         },
                         label = { Text("$preset%") },
+                    )
+                }
+            }
+
+            Text("Round total up to", style = MaterialTheme.typography.titleSmall)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf(0, 1, 5, 10).forEach { unit ->
+                    FilterChip(
+                        selected = roundUpUnit == unit,
+                        onClick = { roundUpUnit = unit },
+                        label = { Text(if (unit == 0) "Off" else "$unit") },
                     )
                 }
             }

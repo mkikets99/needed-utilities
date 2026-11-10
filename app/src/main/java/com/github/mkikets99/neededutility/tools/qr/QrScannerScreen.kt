@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -50,6 +52,13 @@ fun QrScannerScreen(onBack: () -> Unit) {
 
     var scanned by remember { mutableStateOf<String?>(null) }
     var cancelled by remember { mutableStateOf(false) }
+    var historyQuery by remember { mutableStateOf("") }
+
+    val visibleHistory = if (historyQuery.isBlank()) {
+        history
+    } else {
+        history.filter { it.content.contains(historyQuery, ignoreCase = true) }
+    }
 
     val launcher = rememberLauncherForActivityResult(ScanContract()) { result ->
         val content = result.contents
@@ -133,6 +142,20 @@ fun QrScannerScreen(onBack: () -> Unit) {
                             }
                         }
                     }
+                    if (history.isNotEmpty()) {
+                        OutlinedTextField(
+                            value = historyQuery,
+                            onValueChange = { historyQuery = it },
+                            label = { Text("Search history") },
+                            singleLine = true,
+                            leadingIcon = {
+                                Icon(Icons.Filled.Search, contentDescription = null)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                        )
+                    }
                     if (history.isEmpty()) {
                         Text(
                             text = "Scanned codes are saved here.",
@@ -141,7 +164,7 @@ fun QrScannerScreen(onBack: () -> Unit) {
                             modifier = Modifier.padding(top = 8.dp),
                         )
                     } else {
-                        history.forEach { entry ->
+                        visibleHistory.forEach { entry ->
                             Card(
                                 onClick = {
                                     scope.launch {
