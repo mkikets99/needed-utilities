@@ -39,10 +39,13 @@ Builds fall back to debug signing when no keystore is present.
 
 ## Architecture notes
 
-- `ui/common/` — shared `ResultRow`/`ResultRowText` and `Alerts.kt`
-  (`vibrateDevice`, `showCompletionNotification`) used by timer tools.
+- `ui/common/` — shared components **new screens must use**:
+  `ResultRow`/`ResultRowText`, `ToolTopBar` (title + back + actions),
+  `NumberField`, `Alerts.kt` (`vibrateDevice`, `showCompletionNotification`).
 - Countdown notifications: AlarmManager + `CountdownReceiver`, with
   `CountdownBootReceiver` re-scheduling after reboot (09:00 local on event date).
+- Settings: theme mode, dynamic color, **home layout (Cards / List)** — all
+  persisted via DataStore.
 
 ## Known issues / TODO
 
