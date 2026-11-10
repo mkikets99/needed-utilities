@@ -1,0 +1,126 @@
+================================================================================
+AD-MOB-RECIPE.TXT — AdMob integration recipe for The Needed Utility (S-12)
+================================================================================
+Prepared 2026-11-10. Companion to the KEY file `ad-mob.txt`.
+When implementing S-12: read ALL keys from ad-mob.txt — never hardcode IDs.
+
+User-specified behavior (2026-11-10):
+  * Banner ad on the home screen (bottom).
+  * Full-screen (interstitial) ad triggers when switching to a tool for the
+    5th time. "Switch" = any navigation from home into a tool screen.
+    Closing and re-opening the SAME tool also counts as a switch.
+    So: every 5th tool open (5th, 10th, 15th, ...) shows the interstitial.
+
+Pro gate: when S-13 lands, ALL of this is skipped for Pro users (section 7).
+
+--------------------------------------------------------------------------------
+1. KEYS (ad-mob.txt — already prepared)
+--------------------------------------------------------------------------------
+ad-mob.txt holds:
+    ADMOB_APP_ID=...
+    ADMOB_BANNER_UNIT_ID=...
+    ADMOB_INTERSTITIAL_UNIT_ID=...
+
+Load it in app/build.gradle.kts exactly like keystore.properties:
+    val adMobFile = rootProject.file("ad-mob.txt")
+    val adMob = java.util.Properties().apply {
+        if (adMobFile.exists()) adMobFile.inputStream().use { load(it) }
+    }
+    android {
+        defaultConfig {
+            buildConfigField("String", "ADMOB_APP_ID", "\"${adMob.getProperty("ADMOB_APP_ID")}\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"${adMob.getProperty("ADMOB_BANNER_UNIT_ID")}\"")
+            buildConfigField("String", "ADMOB_INTERSTITIAL_UNIT_ID", "\"${adMob.getProperty("ADMOB_INTERSTITIAL_UNIT_ID")}\"")
+        }
+        buildFeatures { buildConfig = true }
+    }
+Also feed ADMOB_APP_ID into the manifest placeholder for the meta-data value.
+
+--------------------------------------------------------------------------------
+2. DEPENDENCIES (gradle/libs.versions.toml + app/build.gradle.kts)
+--------------------------------------------------------------------------------
+[versions]
+playServicesAds = "25.5.0"      # verified 2026-11-10 on Google Maven
+billing = "9.1.0"               # S-13 only
+
+[libraries]
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
+billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }
+
+    implementation(libs.play.services.ads)
+    // implementation(libs.billing)   <- uncomment with S-13
+
+NOTE: play-services-ads pulls a large transitive graph — user-approved
+exception to the minimal-dependency rule.
+
+--------------------------------------------------------------------------------
+3. MANIFEST (app/src/main/AndroidManifest.xml)
+--------------------------------------------------------------------------------
+    <uses-permission android:name="android.permission.INTERNET" />
+
+Inside <application>, BEFORE <activity>:
+    <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="${ADMOB_APP_ID}" />   <!-- manifestPlaceholders -->
+
+--------------------------------------------------------------------------------
+4. ARCHITECTURE — new file: monetization/Ads.kt
+--------------------------------------------------------------------------------
+    object AdManager {
+        private var toolOpenCount: Int = 0        // in-memory, per app session
+        const val INTERSTITIAL_EVERY = 5
+
+        fun onToolOpened(): Boolean {             // call on EVERY tool navigation
+            toolOpenCount++
+            return toolOpenCount % INTERSTITIAL_EVERY == 0   // -> show ad
+        }
+
+        // Interstitial: load at startup + reload after each show (one-shot).
+        // If not loaded when due: skip silently, NEVER block navigation.
+
+        @Composable
+        fun HomeBanner(modifier: Modifier = Modifier) {
+            // AndroidView -> AdView with BuildConfig.ADMOB_BANNER_UNIT_ID
+        }
+    }
+
+--------------------------------------------------------------------------------
+5. INSERTION POINTS
+--------------------------------------------------------------------------------
+a) NeededUtilityApp.kt (HOME route):
+       onToolClick = { tool ->
+           val showAd = AdManager.onToolOpened()
+           navController.navigate(tool.route)
+           if (showAd) AdManager.showInterstitialIfReady(activity)
+       }
+b) ui/home/HomeScreen.kt — AdManager.HomeBanner() at the BOTTOM of the
+   Scaffold content (never overlapping the tool grid).
+c) MainActivity.onCreate — MobileAds.initialize(this)
+
+--------------------------------------------------------------------------------
+6. FREQUENCY / UX RULES
+--------------------------------------------------------------------------------
+  * Interstitial on every 5th tool open (5, 10, 15, ...); re-opening the
+    same tool counts (rule is per open, not per distinct tool).
+  * Never on cold start; never twice in a row; never inside a tool flow.
+  * Offline: app behaves exactly as before — ads are best-effort only.
+
+--------------------------------------------------------------------------------
+7. PRO GATE (coordinate with S-13)
+--------------------------------------------------------------------------------
+    if (!isPro) { ... show ads ... }
+  * isPro from BillingManager (S-13), cached in DataStore.
+  * Pro: no banner, no interstitials, caps lifted (25/25/100).
+
+--------------------------------------------------------------------------------
+8. CHECKLIST
+--------------------------------------------------------------------------------
+  [ ] Keys loaded from ad-mob.txt via buildConfigField (section 1)
+  [ ] Deps + manifest (sections 2-3)
+  [ ] AdManager (section 4); MobileAds.initialize in MainActivity
+  [ ] onToolOpened() in onToolClick; banner on home bottom
+  [ ] Manual test: ad on 5th/10th switch, same-tool re-open counts
+  [ ] Offline: no crash / no blank UI
+  [ ] S-13: gate behind isPro
+
+================================================================================
