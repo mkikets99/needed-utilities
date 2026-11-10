@@ -3,6 +3,7 @@ package com.github.mkikets99.neededutility.tools.notes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -51,15 +53,17 @@ fun NotesScreen(onBack: () -> Unit) {
     var editing by remember { mutableStateOf<Note?>(null) }
     var showDialog by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
+    var selectedTag by remember { mutableStateOf<String?>(null) }
 
-    val visibleNotes = if (query.isBlank()) {
-        notes
-    } else {
-        notes.filter {
-            it.title.contains(query, ignoreCase = true) ||
-                it.body.contains(query, ignoreCase = true) ||
-                it.tag.contains(query, ignoreCase = true)
-        }
+    val allTags = notes.map { it.tag.trim() }.filter { it.isNotBlank() }.distinct().sorted()
+
+    val visibleNotes = notes.filter { note ->
+        val matchesQuery = query.isBlank() ||
+            note.title.contains(query, ignoreCase = true) ||
+            note.body.contains(query, ignoreCase = true) ||
+            note.tag.contains(query, ignoreCase = true)
+        val matchesTag = selectedTag == null || note.tag.trim().equals(selectedTag, ignoreCase = true)
+        matchesQuery && matchesTag
     }
 
     Scaffold(
@@ -97,6 +101,24 @@ fun NotesScreen(onBack: () -> Unit) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             )
+            if (allTags.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    allTags.take(8).forEach { tag ->
+                        FilterChip(
+                            selected = selectedTag == tag,
+                            onClick = {
+                                selectedTag = if (selectedTag == tag) null else tag
+                            },
+                            label = { Text("#$tag") },
+                        )
+                    }
+                }
+            }
             if (visibleNotes.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxSize(),

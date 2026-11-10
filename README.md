@@ -4,7 +4,7 @@ Offline-first multi-tool toolbox for Android. One app that aims to eventually
 hold **everything that can be fitted inside** — a growing set of small, focused
 utilities on one extensible home screen.
 
-## Tools (v1–v5)
+## Tools (v1–v6)
 
 | Tool | Group | Description |
 |---|---|---|
@@ -18,13 +18,16 @@ utilities on one extensible home screen.
 | Fractions | Calculations | Fraction ↔ decimal |
 | Geometry | Calculations | Areas & perimeters (circle, rect, triangle) |
 | Prime Checker | Calculations | Primes & factorization |
+| Number to Words | Calculations | 42 → forty-two |
 | Tip & Split | Money | Tips, splitting, total rounding |
 | Discount | Money | Sale price and savings |
 | Loan Calculator | Money | EMI, interest, total cost |
 | Unit Price | Money | Compare pack value |
 | Fuel Calculator | Money | Trip cost & consumption |
+| Fuel Log | Money | Fill-ups, consumption & cost stats |
 | Savings & Interest | Money | Compound growth with deposits |
 | Electricity Cost | Money | Appliance running cost |
+| Salary Converter | Money | Hourly ↔ monthly ↔ annual |
 | Trip & Expenses | Money | Track & split shared costs |
 | BMI Calculator | Health | Body mass index & healthy range |
 | Age Calculator | Health | Age, days lived, next birthday |
@@ -33,13 +36,14 @@ utilities on one extensible home screen.
 | Text Toolkit | Productivity | Counts, case transforms, reverse |
 | GPA Calculator | Productivity | US 4.0 weighted GPA |
 | Stopwatch & Timer | Time | Laps, presets, vibration & notification |
+| Multi Timer | Time | Concurrent named timers + kitchen presets |
 | World Clock | Time | Times around the world |
 | Date Diff | Time | Days between dates |
-| Countdown | Time | Named events with live countdown |
+| Countdown | Time | Events with scheduled notifications |
 | Sunrise & Sunset | Time | Solar times anywhere (NOAA) |
 | Flashlight | Device | Camera torch toggle |
 | QR Scanner | Device | Scan QR codes, searchable history |
-| QR Generator | Device | Text/URL and WiFi QR codes |
+| QR Generator | Device | Text, WiFi and contact (vCard) QR codes |
 | Compass | Device | Magnetic heading dial |
 | Bubble Level | Device | Surface level with live bubble |
 | Randomizer | Fun & Random | Dice (d4–d20), coin, numbers, passwords |

@@ -1,15 +1,15 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v5-complete",
+  "phase": "v6-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "Offline-first multi-tool toolbox with 38 tools across 7 groups. v5 added speed-distance-time, fractions, geometry, prime checker, GPA, trip & expenses, sunrise & sunset (NOAA equation), team splitter, plus timer presets, tip rounding, note tags, WiFi QR mode and scan-history search. 139 unit tests green, zero warnings.",
+  "summary": "Offline-first multi-tool toolbox with 42 tools across 7 groups. v6 added multi timer (concurrent + kitchen presets), fuel log (consumption stats), salary converter, number-to-words, countdown notifications (AlarmManager + boot rescheduling), note tag chips, QR contact/vCard mode, scan-history export, and release signing (signed app-release.apk verified). 159 unit tests green, zero warnings.",
   "nextSteps": [
     "Password manager tool (deferred; generator already in Randomizer)",
-    "Countdown notifications; tag chips filter for notes",
-    "Candidates: cooking presets, fuel log, converter favorites, QR history export",
-    "Release signing config + first signed build",
+    "Fuel log: per-vehicle logs and CSV export",
+    "Candidates: recipe scaler, BMI history, converter favorites, vCard gallery",
+    "Play Store prep (listing assets, AAB via bundleRelease)",
     "More shared composables extraction (input fields, top bars)"
   ],
   "lastUpdated": "2026-11-10"

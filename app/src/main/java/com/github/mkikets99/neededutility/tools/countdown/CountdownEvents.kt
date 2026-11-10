@@ -29,16 +29,18 @@ class CountdownEventsRepository(private val context: Context) {
         parse(prefs[key]).sortedBy { it.date }
     }
 
-    suspend fun add(name: String, date: LocalDate) {
+    suspend fun add(name: String, date: LocalDate): Long {
+        val id = System.currentTimeMillis()
         context.countdownDataStore.edit { prefs ->
             val current = parse(prefs[key])
             val newEvent = CountdownEvent(
-                id = System.currentTimeMillis(),
+                id = id,
                 name = name,
                 date = date,
             )
             prefs[key] = serialize(current + newEvent)
         }
+        return id
     }
 
     suspend fun delete(id: Long) {

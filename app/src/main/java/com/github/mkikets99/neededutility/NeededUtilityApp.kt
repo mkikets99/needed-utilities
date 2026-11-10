@@ -27,12 +27,14 @@ import com.github.mkikets99.neededutility.tools.discount.DiscountScreen
 import com.github.mkikets99.neededutility.tools.electricity.ElectricityScreen
 import com.github.mkikets99.neededutility.tools.fractions.FractionScreen
 import com.github.mkikets99.neededutility.tools.fuel.FuelScreen
+import com.github.mkikets99.neededutility.tools.fuellog.FuelLogScreen
 import com.github.mkikets99.neededutility.tools.geometry.GeometryScreen
 import com.github.mkikets99.neededutility.tools.gpa.GpaScreen
 import com.github.mkikets99.neededutility.tools.level.LevelScreen
 import com.github.mkikets99.neededutility.tools.loan.LoanScreen
 import com.github.mkikets99.neededutility.tools.metronome.MetronomeScreen
 import com.github.mkikets99.neededutility.tools.morse.MorseScreen
+import com.github.mkikets99.neededutility.tools.multitimer.MultiTimerScreen
 import com.github.mkikets99.neededutility.tools.notes.NotesScreen
 import com.github.mkikets99.neededutility.tools.percentage.PercentageScreen
 import com.github.mkikets99.neededutility.tools.prime.PrimeScreen
@@ -40,6 +42,7 @@ import com.github.mkikets99.neededutility.tools.qr.QrGeneratorScreen
 import com.github.mkikets99.neededutility.tools.qr.QrScannerScreen
 import com.github.mkikets99.neededutility.tools.randomizer.RandomizerScreen
 import com.github.mkikets99.neededutility.tools.roman.RomanScreen
+import com.github.mkikets99.neededutility.tools.salary.SalaryScreen
 import com.github.mkikets99.neededutility.tools.savings.SavingsScreen
 import com.github.mkikets99.neededutility.tools.speed.SpeedScreen
 import com.github.mkikets99.neededutility.tools.stopwatch.StopwatchScreen
@@ -50,6 +53,7 @@ import com.github.mkikets99.neededutility.tools.torch.TorchScreen
 import com.github.mkikets99.neededutility.tools.trip.TripScreen
 import com.github.mkikets99.neededutility.tools.tip.TipCalculatorScreen
 import com.github.mkikets99.neededutility.tools.unitprice.UnitPriceScreen
+import com.github.mkikets99.neededutility.tools.words.NumberToWordsScreen
 import com.github.mkikets99.neededutility.tools.worldclock.WorldClockScreen
 import com.github.mkikets99.neededutility.ui.home.HomeScreen
 import com.github.mkikets99.neededutility.ui.settings.SettingsScreen
@@ -69,7 +73,11 @@ object Routes {
     const val PRIMES = "primes"
     const val GPA = "gpa"
     const val TRIP = "trip"
+    const val FUELLOG = "fuellog"
+    const val SALARY = "salary"
+    const val WORDS = "words"
     const val SUNRISE = "sunrise"
+    const val MULTITIMER = "multitimer"
     const val TEAMS = "teams"
     const val TIP = "tip"
     const val DISCOUNT = "discount"
@@ -155,6 +163,9 @@ fun NeededUtilityApp() {
             composable(Routes.PRIMES) {
                 PrimeScreen(onBack = { navController.popBackStack() })
             }
+            composable(Routes.WORDS) {
+                NumberToWordsScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.TIP) {
                 TipCalculatorScreen(
                     onBack = { navController.popBackStack() },
@@ -181,6 +192,12 @@ fun NeededUtilityApp() {
             }
             composable(Routes.TRIP) {
                 TripScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.FUELLOG) {
+                FuelLogScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.SALARY) {
+                SalaryScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.BMI) {
                 BmiScreen(onBack = { navController.popBackStack() })
@@ -214,6 +231,9 @@ fun NeededUtilityApp() {
             }
             composable(Routes.SUNRISE) {
                 SunriseScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.MULTITIMER) {
+                MultiTimerScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.TORCH) {
                 TorchScreen(onBack = { navController.popBackStack() })

@@ -2,6 +2,8 @@ package com.github.mkikets99.neededutility.tools
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Calculate
@@ -29,6 +31,7 @@ import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -38,6 +41,7 @@ import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -157,6 +161,14 @@ object ToolRegistry {
             route = "primes",
         ),
         Tool(
+            id = "number_to_words",
+            title = "Number to Words",
+            description = "42 → forty-two",
+            icon = Icons.Filled.Translate,
+            group = ToolGroup.CALCULATIONS,
+            route = "words",
+        ),
+        Tool(
             id = "tip_splitter",
             title = "Tip & Split",
             description = "Tip and bill splitting",
@@ -219,6 +231,22 @@ object ToolRegistry {
             icon = Icons.Filled.Luggage,
             group = ToolGroup.MONEY,
             route = "trip",
+        ),
+        Tool(
+            id = "fuel_log",
+            title = "Fuel Log",
+            description = "Fill-ups & consumption",
+            icon = Icons.AutoMirrored.Filled.ReceiptLong,
+            group = ToolGroup.MONEY,
+            route = "fuellog",
+        ),
+        Tool(
+            id = "salary",
+            title = "Salary Converter",
+            description = "Hourly ↔ monthly ↔ annual",
+            icon = Icons.Filled.AccountBalanceWallet,
+            group = ToolGroup.MONEY,
+            route = "salary",
         ),
         Tool(
             id = "bmi",
@@ -307,6 +335,14 @@ object ToolRegistry {
             icon = Icons.Filled.WbTwilight,
             group = ToolGroup.TIME,
             route = "sunrise",
+        ),
+        Tool(
+            id = "multi_timer",
+            title = "Multi Timer",
+            description = "Several timers at once",
+            icon = Icons.Filled.AvTimer,
+            group = ToolGroup.TIME,
+            route = "multitimer",
         ),
         Tool(
             id = "torch",

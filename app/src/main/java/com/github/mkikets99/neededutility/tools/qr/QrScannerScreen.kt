@@ -135,10 +135,22 @@ fun QrScannerScreen(onBack: () -> Unit) {
                     ) {
                         Text("Scan history", style = MaterialTheme.typography.titleSmall)
                         if (history.isNotEmpty()) {
-                            OutlinedButton(onClick = {
-                                scope.launch { repository.clear() }
-                            }) {
-                                Text("Clear")
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                OutlinedButton(onClick = {
+                                    val all = history.joinToString("\n") { it.content }
+                                    scope.launch {
+                                        clipboard.setClipEntry(
+                                            ClipEntry(ClipData.newPlainText("qr-history", all))
+                                        )
+                                    }
+                                }) {
+                                    Text("Copy all")
+                                }
+                                OutlinedButton(onClick = {
+                                    scope.launch { repository.clear() }
+                                }) {
+                                    Text("Clear")
+                                }
                             }
                         }
                     }

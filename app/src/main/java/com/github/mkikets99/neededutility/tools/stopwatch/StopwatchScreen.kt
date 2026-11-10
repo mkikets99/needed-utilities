@@ -1,16 +1,9 @@
 package com.github.mkikets99.neededutility.tools.stopwatch
 
 import android.Manifest
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.SystemClock
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +47,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.github.mkikets99.neededutility.R
+import com.github.mkikets99.neededutility.ui.common.showCompletionNotification
+import com.github.mkikets99.neededutility.ui.common.vibrateDevice
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -211,7 +205,14 @@ private fun TimerTab() {
             running = false
             if (remainingMs == 0L) {
                 vibrateDevice(context)
-                showTimerFinishedNotification(context)
+                showCompletionNotification(
+                    context = context,
+                    channelId = "timer",
+                    channelName = "Timer alerts",
+                    title = "Timer finished",
+                    text = "Your countdown has ended.",
+                    notificationId = 1001,
+                )
             }
         }
     }
@@ -313,35 +314,6 @@ private fun totalFromInputs(minutes: String, seconds: String): Long {
     val m = minutes.toLongOrNull() ?: 0L
     val s = (seconds.toLongOrNull() ?: 0L).coerceIn(0L, 59L)
     return (m * 60L + s) * 1000L
-}
-
-private const val TIMER_NOTIFICATION_ID = 1001
-
-@Suppress("DEPRECATION")
-private fun vibrateDevice(context: Context) {
-    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-    } else {
-        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    }
-    vibrator.vibrate(VibrationEffect.createOneShot(600, VibrationEffect.DEFAULT_AMPLITUDE))
-}
-
-private fun showTimerFinishedNotification(context: Context) {
-    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val channel = NotificationChannel(
-        "timer",
-        "Timer alerts",
-        NotificationManager.IMPORTANCE_HIGH,
-    )
-    manager.createNotificationChannel(channel)
-    val notification = Notification.Builder(context, "timer")
-        .setSmallIcon(R.drawable.ic_stat_timer)
-        .setContentTitle("Timer finished")
-        .setContentText("Your countdown has ended.")
-        .setAutoCancel(true)
-        .build()
-    manager.notify(TIMER_NOTIFICATION_ID, notification)
 }
 
 private fun formatElapsed(ms: Long): String {

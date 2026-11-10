@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.Instant
@@ -59,6 +60,10 @@ fun CountdownScreen(onBack: () -> Unit) {
 
     var now by remember { mutableStateOf(Instant.now()) }
     LaunchedEffect(Unit) {
+        // (Re)schedule future events so alarms stay fresh across app updates.
+        repository.events.first()
+            .filter { !it.date.isBefore(LocalDate.now()) }
+            .forEach { CountdownNotifier.schedule(context, it) }
         while (true) {
             now = Instant.now()
             delay(1000)
@@ -139,7 +144,10 @@ fun CountdownScreen(onBack: () -> Unit) {
                                 )
                             }
                             IconButton(onClick = {
-                                scope.launch { repository.delete(event.id) }
+                                scope.launch {
+                                    CountdownNotifier.cancel(context, event.id)
+                                    repository.delete(event.id)
+                                }
                             }) {
                                 Icon(Icons.Filled.Delete, contentDescription = "Delete event")
                             }
@@ -153,7 +161,13 @@ fun CountdownScreen(onBack: () -> Unit) {
     if (showDialog) {
         AddEventDialog(
             onSave = { name, date ->
-                scope.launch { repository.add(name, date) }
+                scope.launch {
+                    val id = repository.add(name, date)
+                    CountdownNotifier.schedule(
+                        context,
+                        CountdownEvent(id = id, name = name, date = date),
+                    )
+                }
                 showDialog = false
             },
             onDismiss = { showDialog = false },

@@ -26,16 +26,17 @@ app/src/main/java/com/github/mkikets99/neededutility/
 │   ├── ToolRegistry.kt          # ALL tools + groups are registered here
 │   ├── converter/               # UnitConverter.kt (logic) + screen
 │   ├── calculator/              # CalculatorEngine.kt, CalculatorHistory.kt + screen
-│   ├── percentage/ bases/ roman/ color/ speed/ fractions/ geometry/ prime/
-│   ├── tip/ discount/ loan/ unitprice/ fuel/ savings/ electricity/ trip/
+│   ├── percentage/ bases/ roman/ color/ speed/ fractions/ geometry/ prime/ words/
+│   ├── tip/ discount/ loan/ unitprice/ fuel/ savings/ electricity/ trip/ fuellog/ salary/
 │   ├── bmi/ age/ bmr/
 │   ├── notes/ text/ gpa/
-│   ├── stopwatch/ worldclock/ datediff/ countdown/ sunrise/
+│   ├── stopwatch/ multitimer/ worldclock/ datediff/ countdown/ sunrise/
 │   ├── torch/ compass/ level/
-│   ├── qr/                      # scanner (+ history), generator (+ WiFi), WifiQr.kt
+│   ├── qr/                      # scanner (+ history), generator (text/WiFi/vCard), builders
 │   ├── randomizer/ metronome/ morse/ teams/
 └── ui/
     ├── common/CommonComponents.kt  # shared ResultRow / ResultRowText
+    ├── common/Alerts.kt         # vibrateDevice + showCompletionNotification
     ├── home/HomeScreen.kt       # grouped, extensible tool grid
     ├── settings/SettingsScreen.kt
     └── theme/Theme.kt           # M3 + dynamic color
@@ -70,7 +71,12 @@ is connected, build-only is the accepted fallback.
 ## Gotchas
 
 - `local.properties` is machine-local (git-ignored) and holds `sdk.dir`.
+- **Release signing**: `keystore/release.keystore` + `keystore.properties`
+  (git-ignored). The signing password is in `keystore.properties` on this
+  machine — keep it safe. Builds fall back to debug signing without it.
 - Torch tool requires a real camera flash; it gracefully reports when absent.
+- Timer-like tools must use `ui/common/Alerts.kt` (`vibrateDevice`,
+  `showCompletionNotification`) for completion feedback.
 - Lint is non-fatal (`abortOnError = false`); check
   `app/build/reports/lint-results-debug.html` before shipping.
 - **ZXing API notes** (learned the hard way): result parsing is

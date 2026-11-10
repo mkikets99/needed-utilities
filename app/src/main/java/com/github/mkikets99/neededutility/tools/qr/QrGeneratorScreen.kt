@@ -41,6 +41,7 @@ private const val QR_SIZE = 512
 private enum class QrMode(val label: String) {
     TEXT("Text / URL"),
     WIFI("WiFi network"),
+    CONTACT("Contact"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,10 +52,20 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
     var ssid by remember { mutableStateOf("") }
     var wifiPassword by remember { mutableStateOf("") }
     var hidden by remember { mutableStateOf(false) }
+    var contactName by remember { mutableStateOf("") }
+    var contactPhone by remember { mutableStateOf("") }
+    var contactEmail by remember { mutableStateOf("") }
+    var contactOrg by remember { mutableStateOf("") }
 
     val payload = when (mode) {
         QrMode.TEXT -> text
         QrMode.WIFI -> WifiQr.build(ssid, wifiPassword, hidden)
+        QrMode.CONTACT -> ContactQr.build(
+            name = contactName,
+            phone = contactPhone,
+            email = contactEmail,
+            organization = contactOrg,
+        ) ?: ""
     }
     val bitmap = remember(payload) {
         if (payload.isBlank()) null
@@ -125,6 +136,37 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
                         Switch(checked = hidden, onCheckedChange = { hidden = it })
                     }
                 }
+
+                QrMode.CONTACT -> {
+                    OutlinedTextField(
+                        value = contactName,
+                        onValueChange = { contactName = it },
+                        label = { Text("Name") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OutlinedTextField(
+                        value = contactPhone,
+                        onValueChange = { contactPhone = it },
+                        label = { Text("Phone") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OutlinedTextField(
+                        value = contactEmail,
+                        onValueChange = { contactEmail = it },
+                        label = { Text("Email") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OutlinedTextField(
+                        value = contactOrg,
+                        onValueChange = { contactOrg = it },
+                        label = { Text("Organization (optional)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
 
             if (bitmap != null) {
@@ -141,6 +183,7 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
                         text = when (mode) {
                             QrMode.TEXT -> "QR code for ${text.length} character(s)"
                             QrMode.WIFI -> "WiFi QR for \"${ssid.ifBlank { "network" }}\" — scan to join"
+                            QrMode.CONTACT -> "Contact card for \"${contactName.ifBlank { "someone" }}\""
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -151,6 +194,7 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
                     text = when (mode) {
                         QrMode.TEXT -> "Type something to generate a QR code."
                         QrMode.WIFI -> "Enter an SSID to generate a WiFi QR code."
+                        QrMode.CONTACT -> "Enter a name to generate a contact QR code."
                     },
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
