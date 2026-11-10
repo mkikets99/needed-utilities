@@ -108,6 +108,7 @@ All reviewed 2026-11-10 and **approved as candidates**:
 | T-05 | CI build (GitHub Actions) | Remote live: github.com/mkikets99/needed-utilities; add a workflow that runs `./gradlew build` on push |
 | T-06 | Privacy policy draft | ✅ drafted `PRIVACY_POLICY.md` (2026-11-10) — **needs hosting at a public URL before Play submission** (GitHub Pages suggested) |
 | T-07 | Terms of use draft | ✅ drafted `TERMS_OF_USE.md` (2026-11-10) — host alongside the privacy policy |
+| T-08 | Store listing copy | ✅ drafted `STORE_LISTING.md` (2026-11-10) — short + full description + in-app About; screenshots & feature graphic still needed |
 
 ## Suggested build order
 

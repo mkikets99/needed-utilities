@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.mkikets99.neededutility.BuildConfig
 import com.github.mkikets99.neededutility.data.HomeLayoutMode
 import com.github.mkikets99.neededutility.data.SettingsRepository
 import com.github.mkikets99.neededutility.data.ThemeMode
@@ -171,6 +172,20 @@ fun SettingsScreen(
                     },
                 )
             }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            Text("About", style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = "The Needed Utility — all the tools you need, under your palm.\n\n" +
+                    "One app, dozens of offline utilities: calculators, converters, timers, " +
+                    "QR tools, sensors and more. No accounts, no tracking — your data stays " +
+                    "on your device.\n\n" +
+                    "Version ${BuildConfig.VERSION_NAME}\n" +
+                    "Made by Mykola Kikets.",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp),
+            )
         }
     }
 
