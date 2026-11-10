@@ -1,16 +1,16 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v8-complete",
+  "phase": "v9-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "v8 integrated AdMob per user recipe: home banner + interstitial on every 5th tool switch (re-opening same tool counts), keys from ad-mob.txt via BuildConfig, best-effort loading (offline-safe). v7 added home UI modes (Cards/List) and shared ToolTopBar/NumberField across all 42 tools. 163 tests green. Next: S-13 Pro paywall gating ads.",
+  "summary": "v9 shipped the one-time Pro paywall (S-13): billing-client 9.1.0 with API verified against the artifact, product id 'pro', purchase state cached in DataStore and re-synced from Play, ads (banner + interstitials) gated behind isPro, generous caps (25 notes / 25 events / 100 fuel / 100 trip) enforced with paywall dialog at limit, Buy + Restore + live price in dialog and Settings. v8 added AdMob. 166 tests green.",
   "nextSteps": [
-    "S-13 Pro paywall (one-time IAP): gate ads + lift caps (25/25/100)",
     "S-02 countdown exact alarms, S-03 metronome tap tempo, S-04 sensor calibration",
     "S-16 localization prep (strings.xml for en, en-GB, uk, pl, de, fr, es)",
     "S-05..S-10, S-14, S-15 feature block (favorites, exports, vehicles, BMI history, recipe scaler, currency, password vault)",
-    "Candidates C-01..C-22 as capacity allows; Play release (D-03) when ready"
+    "Play Console: define one-time product 'pro' + listing when publishing (D-03)",
+    "Candidates C-01..C-22 as capacity allows"
   ],
   "lastUpdated": "2026-11-10"
 }

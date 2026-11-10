@@ -41,6 +41,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.mkikets99.neededutility.monetization.Limits
+import com.github.mkikets99.neededutility.monetization.PaywallDialog
+import com.github.mkikets99.neededutility.monetization.ProState
 import com.github.mkikets99.neededutility.ui.common.ResultRow
 import kotlinx.coroutines.launch
 
@@ -54,6 +57,9 @@ fun TripScreen(onBack: () -> Unit) {
 
     var people by remember { mutableIntStateOf(2) }
     var showDialog by remember { mutableStateOf(false) }
+    var showPaywall by remember { mutableStateOf(false) }
+
+    val isPro by ProState.isPro.collectAsStateWithLifecycle()
 
     val total = TripSplit.total(expenses)
     val perPerson = TripSplit.perPerson(total, people)
@@ -63,7 +69,13 @@ fun TripScreen(onBack: () -> Unit) {
             ToolTopBar(title = "Trip & Expenses", onBack = onBack)
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
+            FloatingActionButton(onClick = {
+                if (Limits.canAdd(expenses.size, isPro, Limits.MAX_TRIP_ENTRIES)) {
+                    showDialog = true
+                } else {
+                    showPaywall = true
+                }
+            }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add expense")
             }
         },
@@ -150,6 +162,10 @@ fun TripScreen(onBack: () -> Unit) {
             },
             onDismiss = { showDialog = false },
         )
+    }
+
+    if (showPaywall) {
+        PaywallDialog(onDismiss = { showPaywall = false })
     }
 }
 

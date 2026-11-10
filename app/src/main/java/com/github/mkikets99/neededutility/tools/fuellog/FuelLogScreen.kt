@@ -38,6 +38,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.mkikets99.neededutility.monetization.Limits
+import com.github.mkikets99.neededutility.monetization.PaywallDialog
+import com.github.mkikets99.neededutility.monetization.ProState
 import com.github.mkikets99.neededutility.ui.common.ResultRow
 import kotlinx.coroutines.launch
 
@@ -50,6 +53,8 @@ fun FuelLogScreen(onBack: () -> Unit) {
     val fillUps by repository.fillUps.collectAsStateWithLifecycle(initialValue = emptyList())
 
     var showDialog by remember { mutableStateOf(false) }
+    var showPaywall by remember { mutableStateOf(false) }
+    val isPro by ProState.isPro.collectAsStateWithLifecycle()
     val stats = FuelStats.compute(fillUps)
 
     Scaffold(
@@ -57,7 +62,13 @@ fun FuelLogScreen(onBack: () -> Unit) {
             ToolTopBar(title = "Fuel Log", onBack = onBack)
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
+            FloatingActionButton(onClick = {
+                if (Limits.canAdd(fillUps.size, isPro, Limits.MAX_FUEL_ENTRIES)) {
+                    showDialog = true
+                } else {
+                    showPaywall = true
+                }
+            }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add fill-up")
             }
         },
@@ -146,6 +157,10 @@ fun FuelLogScreen(onBack: () -> Unit) {
             },
             onDismiss = { showDialog = false },
         )
+    }
+
+    if (showPaywall) {
+        PaywallDialog(onDismiss = { showPaywall = false })
     }
 }
 

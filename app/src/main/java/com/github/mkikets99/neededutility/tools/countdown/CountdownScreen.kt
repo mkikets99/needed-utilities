@@ -42,6 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.mkikets99.neededutility.monetization.Limits
+import com.github.mkikets99.neededutility.monetization.PaywallDialog
+import com.github.mkikets99.neededutility.monetization.ProState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -72,13 +75,22 @@ fun CountdownScreen(onBack: () -> Unit) {
     }
 
     var showDialog by remember { mutableStateOf(false) }
+    var showPaywall by remember { mutableStateOf(false) }
+
+    val isPro by ProState.isPro.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
             ToolTopBar(title = "Countdown", onBack = onBack)
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
+            FloatingActionButton(onClick = {
+                if (Limits.canAdd(events.size, isPro, Limits.MAX_EVENTS)) {
+                    showDialog = true
+                } else {
+                    showPaywall = true
+                }
+            }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add event")
             }
         },
@@ -166,6 +178,10 @@ fun CountdownScreen(onBack: () -> Unit) {
             },
             onDismiss = { showDialog = false },
         )
+    }
+
+    if (showPaywall) {
+        PaywallDialog(onDismiss = { showPaywall = false })
     }
 }
 

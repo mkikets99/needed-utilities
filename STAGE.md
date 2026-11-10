@@ -44,9 +44,8 @@ forward-looking plan only).
 
 ### Monetization (plumbing first — user decided 2026-11-10)
 
-| ID | Item | Description | Notes |
-|---|---|---|---|
-| S-13 | One-time "Pro" paywall | Removes ads + lifts free-tier caps | Deps pre-approved: `billing-client`; **generous caps: 25 notes / 25 events / 100 entries** |
+All shipped in v8–v9. Remaining: define the one-time managed product
+**`pro`** in the Play Console when publishing (billing no-ops without it).
 
 > Publish-to-Play is **not** required to build S-12/S-13 — use test ads and
 > Play Billing test flow first (D-03 stays deferred until publishing intent).
@@ -111,12 +110,11 @@ All reviewed 2026-11-10 and **approved as candidates**:
 
 ## Suggested build order
 
-1. ~~S-01 → S-11~~ ✅ done (v7); ~~S-12~~ ✅ done (v8)
+1. ~~S-01 → S-11 → S-12 → S-13~~ ✅ done (v7–v9)
 2. **S-02 → S-03 → S-04** (tool polish) and **S-16** (localization prep)
 3. **S-05 → S-06 → S-07 → S-08 → S-09 → S-10 → S-14 → S-15**
-4. **S-13** (Pro paywall — now gates the shipped ads)
-5. Candidates promoted from the backlog as capacity allows; revisit **D-03**
-   when ready to publish.
+4. Candidates promoted from the backlog as capacity allows; revisit **D-03**
+   when ready to publish (then define the `pro` product + real ad units).
 
 ---
 

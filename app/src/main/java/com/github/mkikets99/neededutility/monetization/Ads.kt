@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ object AdManager {
 
     /** Shows the interstitial if one is ready; never blocks navigation. */
     fun showInterstitialIfReady(activity: Activity) {
+        if (ProState.isPro.value) return // Pro removes ads
         val ad = interstitialAd ?: return
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
@@ -85,6 +87,8 @@ object AdManager {
     @Composable
     fun HomeBanner(modifier: Modifier = Modifier) {
         if (BuildConfig.ADMOB_BANNER_UNIT_ID.isBlank()) return
+        val isPro by ProState.isPro.collectAsState()
+        if (isPro) return // Pro removes ads
         var loaded by remember { mutableStateOf(false) }
         Box(
             modifier = modifier

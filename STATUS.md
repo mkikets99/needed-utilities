@@ -54,11 +54,18 @@ Builds fall back to debug signing when no keystore is present.
   open counts and re-opening the same tool included (`AdFrequency`, unit
   tested). Keys in `ad-mob.txt` → `BuildConfig`; ads are best-effort and
   never affect tools offline.
-- **Pro (S-13, next)**: one-time purchase, removes ads + lifts caps
-  (25 notes / 25 events / 100 entries).
+- **Pro paywall live (v9)**: one-time purchase (`billing-client`, product id
+  `pro`) — removes all ads (banner + interstitials gated on `ProState.isPro`)
+  and lifts caps (25 notes / 25 events / 100 fuel / 100 trip entries,
+  `Limits` unit-tested). Purchase state cached in DataStore (offline-proof),
+  re-synced from Play on startup; paywall dialog from Settings and whenever
+  a cap is hit (Buy + Restore buttons; shows live price when available).
 
 ## Known issues / TODO
 
+- **Play Console setup pending** (D-03): billing requires a managed product
+  with id `pro`; until defined, purchases no-op gracefully. Real ad units
+  are already in `ad-mob.txt`.
 - Countdown alarms are inexact; a permission prompt for exact alarms could
   be added later (Android 12+ SCHEDULE_EXACT_ALARM).
 - Lint is non-fatal; hardcoded UI strings produce warnings (accepted).

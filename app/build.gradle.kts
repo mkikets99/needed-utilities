@@ -118,6 +118,7 @@ dependencies {
     implementation(libs.zxing.core)
 
     implementation(libs.play.services.ads)
+    implementation(libs.billing)
 
     testImplementation(libs.junit)
     debugImplementation(libs.androidx.ui.tooling)

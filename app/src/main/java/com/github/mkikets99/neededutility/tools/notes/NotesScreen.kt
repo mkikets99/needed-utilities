@@ -39,6 +39,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.mkikets99.neededutility.monetization.Limits
+import com.github.mkikets99.neededutility.monetization.PaywallDialog
+import com.github.mkikets99.neededutility.monetization.ProState
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Date
@@ -55,6 +58,9 @@ fun NotesScreen(onBack: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     var selectedTag by remember { mutableStateOf<String?>(null) }
+    var showPaywall by remember { mutableStateOf(false) }
+
+    val isPro by ProState.isPro.collectAsStateWithLifecycle()
 
     val allTags = notes.map { it.tag.trim() }.filter { it.isNotBlank() }.distinct().sorted()
 
@@ -74,8 +80,12 @@ fun NotesScreen(onBack: () -> Unit) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    editing = null
-                    showDialog = true
+                    if (Limits.canAdd(notes.size, isPro, Limits.MAX_NOTES)) {
+                        editing = null
+                        showDialog = true
+                    } else {
+                        showPaywall = true
+                    }
                 },
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add note")
@@ -182,7 +192,7 @@ fun NotesScreen(onBack: () -> Unit) {
         }
     }
 
-            if (showDialog) {
+    if (showDialog) {
         NoteDialog(
             note = editing,
             onSave = { title, body, tag ->
@@ -206,6 +216,10 @@ fun NotesScreen(onBack: () -> Unit) {
             },
             onDismiss = { showDialog = false },
         )
+    }
+
+    if (showPaywall) {
+        PaywallDialog(onDismiss = { showPaywall = false })
     }
 }
 
