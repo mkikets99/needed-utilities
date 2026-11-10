@@ -66,7 +66,9 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // C-10: obfuscation + shrinking (rules in proguard-rules.pro).
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -1,16 +1,16 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v9-complete",
+  "phase": "v11-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "v9 shipped the one-time Pro paywall (S-13): billing-client 9.1.0 with API verified against the artifact, product id 'pro', purchase state cached in DataStore and re-synced from Play, ads (banner + interstitials) gated behind isPro, generous caps (25 notes / 25 events / 100 fuel / 100 trip) enforced with paywall dialog at limit, Buy + Restore + live price in dialog and Settings. v8 added AdMob. 166 tests green.",
+  "summary": "v11 enabled R8 obfuscation + resource shrinking with tuned ProGuard rules (ads, billing, ZXing keeps; app code fully obfuscated). Release APK 57.5 -> 7.9 MB, AAB 17.2 -> 9 MB, signature verified, 170 tests green. Earlier: exact alarms, metronome tap tempo + drift-free beats, sensor calibration (v10), privacy policy, terms of use, store listing + rendered icons (docs), GitHub remote live.",
   "nextSteps": [
-    "S-02 countdown exact alarms, S-03 metronome tap tempo, S-04 sensor calibration",
+    "Smoke-test the obfuscated RELEASE build on a physical device before shipping",
     "S-16 localization prep (strings.xml for en, en-GB, uk, pl, de, fr, es)",
     "S-05..S-10, S-14, S-15 feature block (favorites, exports, vehicles, BMI history, recipe scaler, currency, password vault)",
-    "Play Console: define one-time product 'pro' + listing when publishing (D-03)",
-    "Candidates C-01..C-22 as capacity allows"
+    "Play Console: host policy URLs, create product 'pro', Data safety form, screenshots + feature graphic",
+    "Candidates C-01..C-09, C-11..C-22 as capacity allows"
   ],
   "lastUpdated": "2026-11-10"
 }

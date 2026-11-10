@@ -83,7 +83,6 @@ All reviewed 2026-11-10 and **approved as candidates**:
 | C-07 | Heart-rate camera | PPG via camera flash (noisy, fun) |
 | C-08 | Result cards | Share tool result as image card |
 | C-09 | App shortcuts | Long-press launcher shortcuts for tools |
-| C-10 | R8 minification | Minify + tuned ProGuard before Play release |
 | C-11 | Pomodoro timer | Focus sessions with breaks + alerts |
 | C-12 | Sound meter | Mic-based rough decibel meter |
 | C-13 | Drawing pad | Finger drawing, save as image |

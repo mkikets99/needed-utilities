@@ -63,6 +63,10 @@ Builds fall back to debug signing when no keystore is present.
 
 ## Known issues / TODO
 
+- **Obfuscation enabled (v11)**: R8 minify + resource shrinking with tuned
+  rules (`app/proguard-rules.pro`); release APK 7.9 MB / AAB 9 MB. Before
+  each release, smoke-test the RELEASE build on a physical device (R8 can
+  surface reflection issues that unit tests can't catch).
 - **Play Console setup pending** (D-03): billing requires a managed product
   with id `pro`; until defined, purchases no-op gracefully. Real ad units
   are already in `ad-mob.txt`. Privacy policy drafted
