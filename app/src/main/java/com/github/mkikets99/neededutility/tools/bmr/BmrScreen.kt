@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.bmr
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,14 +50,7 @@ fun BmrScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Daily Calories (BMR)") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Daily Calories (BMR)", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

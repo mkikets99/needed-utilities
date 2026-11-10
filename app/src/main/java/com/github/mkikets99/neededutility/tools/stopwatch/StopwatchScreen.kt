@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.stopwatch
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
@@ -58,14 +59,7 @@ fun StopwatchScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Stopwatch & Timer") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Stopwatch & Timer", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

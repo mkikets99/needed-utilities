@@ -127,7 +127,8 @@ fun NeededUtilityApp() {
             composable(Routes.HOME) {
                 HomeScreen(
                     onToolClick = { tool -> navController.navigate(tool.route) },
-                    onSettingsClick = { navController.navigate(Routes.SETTINGS) }
+                    onSettingsClick = { navController.navigate(Routes.SETTINGS) },
+                    layoutMode = settings.homeLayout,
                 )
             }
             composable(Routes.CONVERTER) {

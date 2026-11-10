@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.unitprice
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,14 +45,7 @@ fun UnitPriceScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Unit Price") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Unit Price", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.prime
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,14 +38,7 @@ fun PrimeScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Prime Checker") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Prime Checker", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

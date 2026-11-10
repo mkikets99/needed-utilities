@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.discount
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,14 +45,7 @@ fun DiscountScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Discount") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Discount", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

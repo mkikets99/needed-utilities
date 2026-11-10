@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.gpa
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,14 +54,7 @@ fun GpaScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("GPA Calculator") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "GPA Calculator", onBack = onBack)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {

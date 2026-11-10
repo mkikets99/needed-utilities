@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.countdown
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -74,14 +75,7 @@ fun CountdownScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Countdown") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Countdown", onBack = onBack)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {

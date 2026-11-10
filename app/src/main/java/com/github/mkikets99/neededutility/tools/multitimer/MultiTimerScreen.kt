@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.multitimer
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.os.SystemClock
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,14 +67,7 @@ fun MultiTimerScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Multi Timer") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Multi Timer", onBack = onBack)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {

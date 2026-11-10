@@ -24,7 +24,6 @@ forward-looking plan only).
 
 | ID | Item | Description | Notes |
 |---|---|---|---|
-| S-01 | Shared input components | Extract `NumberField` / `ToolTopBar` into `ui/common` | Pure refactor |
 | S-02 | Countdown exact alarms | `SCHEDULE_EXACT_ALARM` where permitted, inexact fallback | Android 12+ nuance |
 | S-03 | Metronome upgrades | Tap tempo + frame-clock timing | — |
 | S-04 | Sensor calibration UI | Compass offset + level "zero" button | — |
@@ -39,7 +38,6 @@ forward-looking plan only).
 | S-08 | Fuel log: vehicles | Multiple named vehicles | Extends repo |
 | S-09 | BMI history | Weight/BMI over time + trend | Health group |
 | S-10 | Recipe scaler | Scale ingredients by servings | — |
-| S-11 | Home UI modes | **Cards (current) / List** toggle in Settings, persisted | Decided 2026-11-10 |
 | S-14 | Currency converter | Online rates API, **cached 7 days, refresh on connectivity** | Decided 2026-11-10; adds INTERNET permission (rates only) |
 | S-15 | Password manager | Encrypted local vault: master password + entries + copy | Decided 2026-11-10; needs crypto design (Android Keystore) |
 | S-16 | Localization prep | Move all strings to `strings.xml`, ready for en, en-GB, uk, pl, de, fr, es… | Decided 2026-11-10; languages come later |
@@ -112,7 +110,7 @@ All reviewed 2026-11-10 and **approved as candidates**:
 
 ## Suggested build order
 
-1. **S-01 → S-11** (UI foundation + home layout modes)
+1. ~~S-01 → S-11~~ ✅ done (v7)
 2. **S-02 → S-03 → S-04** (tool polish) and **S-16** (localization prep)
 3. **S-05 → S-06 → S-07 → S-08 → S-09 → S-10 → S-14 → S-15**
 4. **S-12 + S-13** together (shared `isPro` gate, test ads/billing)

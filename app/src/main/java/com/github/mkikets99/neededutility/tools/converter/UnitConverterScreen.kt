@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.converter
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,14 +73,7 @@ fun UnitConverterScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Unit Converter") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Unit Converter", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

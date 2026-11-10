@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.metronome
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.media.AudioManager
 import android.media.ToneGenerator
 import androidx.compose.animation.core.animateFloatAsState
@@ -67,14 +68,7 @@ fun MetronomeScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Metronome") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Metronome", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

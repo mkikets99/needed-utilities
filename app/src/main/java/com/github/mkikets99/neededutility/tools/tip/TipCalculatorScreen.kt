@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.tip
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -75,14 +76,7 @@ fun TipCalculatorScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Tip & Split") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Tip & Split", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

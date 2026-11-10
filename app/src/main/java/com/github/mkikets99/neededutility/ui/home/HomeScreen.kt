@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,20 +31,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.github.mkikets99.neededutility.data.HomeLayoutMode
 import com.github.mkikets99.neededutility.tools.Tool
 import com.github.mkikets99.neededutility.tools.ToolGroup
 import com.github.mkikets99.neededutility.tools.ToolRegistry
 
 /**
  * Home screen: shows every registered tool grouped by [ToolGroup].
- * Groups and tools come from [ToolRegistry], so the screen automatically
- * grows as new tools are added.
+ * Supports two layouts: cards grid (default) and compact list — chosen in
+ * Settings ([HomeLayoutMode]). Groups and tools come from [ToolRegistry], so
+ * the screen grows automatically as new tools are added.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onToolClick: (Tool) -> Unit,
     onSettingsClick: () -> Unit,
+    layoutMode: HomeLayoutMode = HomeLayoutMode.CARDS,
 ) {
     Scaffold(
         topBar = {
@@ -74,18 +80,37 @@ fun HomeScreen(
                             modifier = Modifier.padding(top = 8.dp),
                         )
                     }
-                    items(tools.chunked(2).size) { rowIndex ->
-                        val rowTools = tools.chunked(2)[rowIndex]
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            rowTools.forEach { tool ->
-                                ToolCard(
+                    when (layoutMode) {
+                        HomeLayoutMode.CARDS -> {
+                            items(tools.chunked(2).size) { rowIndex ->
+                                val rowTools = tools.chunked(2)[rowIndex]
+                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    rowTools.forEach { tool ->
+                                        ToolCard(
+                                            tool = tool,
+                                            onClick = { onToolClick(tool) },
+                                            modifier = Modifier.weight(1f),
+                                        )
+                                    }
+                                    if (rowTools.size == 1) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
+                            }
+                        }
+
+                        HomeLayoutMode.LIST -> {
+                            items(tools.size) { index ->
+                                val tool = tools[index]
+                                ToolListRow(
                                     tool = tool,
                                     onClick = { onToolClick(tool) },
-                                    modifier = Modifier.weight(1f),
                                 )
-                            }
-                            if (rowTools.size == 1) {
-                                Spacer(modifier = Modifier.weight(1f))
+                                if (index < tools.size - 1) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(start = 52.dp),
+                                    )
+                                }
                             }
                         }
                     }
@@ -137,5 +162,56 @@ private fun ToolCard(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+    }
+}
+
+@Composable
+private fun ToolListRow(
+    tool: Tool,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer,
+            modifier = Modifier.size(36.dp),
+        ) {
+            Icon(
+                imageVector = tool.icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding(8.dp),
+            )
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp),
+        ) {
+            Text(
+                text = tool.title,
+                style = MaterialTheme.typography.titleSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = tool.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.outline,
+        )
     }
 }

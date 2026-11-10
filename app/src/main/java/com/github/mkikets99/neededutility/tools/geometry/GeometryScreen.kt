@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.geometry
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.github.mkikets99.neededutility.ui.common.NumberField
 import com.github.mkikets99.neededutility.ui.common.ResultRow
 
 private enum class Shape(val label: String) {
@@ -51,14 +53,7 @@ fun GeometryScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Geometry") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Geometry", onBack = onBack)
         },
     ) { innerPadding ->
         Column(
@@ -155,14 +150,4 @@ fun GeometryScreen(onBack: () -> Unit) {
     }
 }
 
-@Composable
-private fun NumberField(label: String, value: String, onChange: (String) -> Unit) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onChange,
-        label = { Text(label) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
-    )
-}
+

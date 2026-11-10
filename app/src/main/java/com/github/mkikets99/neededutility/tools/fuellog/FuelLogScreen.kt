@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.fuellog
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,14 +54,7 @@ fun FuelLogScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Fuel Log") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Fuel Log", onBack = onBack)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {

@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.randomizer
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.content.ClipData
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -60,14 +61,7 @@ fun RandomizerScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Randomizer") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Randomizer", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

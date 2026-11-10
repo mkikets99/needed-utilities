@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.compass
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -76,14 +77,7 @@ fun CompassScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Compass") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Compass", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

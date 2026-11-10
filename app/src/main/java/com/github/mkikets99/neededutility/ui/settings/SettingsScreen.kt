@@ -1,5 +1,7 @@
 package com.github.mkikets99.neededutility.ui.settings
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +11,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.mkikets99.neededutility.data.HomeLayoutMode
 import com.github.mkikets99.neededutility.data.SettingsRepository
 import com.github.mkikets99.neededutility.data.ThemeMode
 import kotlinx.coroutines.launch
@@ -43,14 +47,7 @@ fun SettingsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Settings") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Settings", onBack = onBack)
         },
     ) { innerPadding ->
         Column(
@@ -83,6 +80,26 @@ fun SettingsScreen(
                             ThemeMode.DARK -> "Dark"
                         },
                         modifier = Modifier.padding(start = 12.dp),
+                    )
+                }
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            Text("Home layout", style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                HomeLayoutMode.entries.forEach { layout ->
+                    FilterChip(
+                        selected = settings.homeLayout == layout,
+                        onClick = { scope.launch { repository.setHomeLayout(layout) } },
+                        label = {
+                            Text(if (layout == HomeLayoutMode.CARDS) "Cards" else "List")
+                        },
                     )
                 }
             }

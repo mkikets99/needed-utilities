@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.torch
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -102,14 +103,7 @@ fun TorchScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Flashlight") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Flashlight", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

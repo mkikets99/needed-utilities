@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.qr
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.content.ClipData
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
@@ -73,14 +74,7 @@ fun QrScannerScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("QR Scanner") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "QR Scanner", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

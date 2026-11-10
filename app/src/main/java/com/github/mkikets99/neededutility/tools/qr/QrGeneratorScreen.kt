@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.qr
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.compose.foundation.Image
@@ -74,14 +75,7 @@ fun QrGeneratorScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("QR Generator") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "QR Generator", onBack = onBack)
         },
     ) { innerPadding ->
         Column(

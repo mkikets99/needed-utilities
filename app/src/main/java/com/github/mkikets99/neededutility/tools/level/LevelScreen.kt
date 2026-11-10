@@ -1,5 +1,6 @@
 package com.github.mkikets99.neededutility.tools.level
 
+import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -80,14 +81,7 @@ fun LevelScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Bubble Level") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
+            ToolTopBar(title = "Bubble Level", onBack = onBack)
         },
     ) { innerPadding ->
         Column(
