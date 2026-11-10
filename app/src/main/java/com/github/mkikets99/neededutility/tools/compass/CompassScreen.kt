@@ -10,14 +10,17 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -53,6 +56,11 @@ fun CompassScreen(onBack: () -> Unit) {
 
     var azimuth by remember { mutableFloatStateOf(0f) }
     var hasSensor by remember { mutableStateOf(true) }
+    var offsetDeg by remember { mutableFloatStateOf(0f) }
+
+    // S-04: user calibration — subtract a fixed offset captured at a known
+    // heading (phone pointing north).
+    val calibrated = ((azimuth - offsetDeg) + 360f) % 360f
 
     DisposableEffect(sensorManager) {
         val listener = object : SensorEventListener {
@@ -105,7 +113,7 @@ fun CompassScreen(onBack: () -> Unit) {
                 drawCircle(color = onSurface.copy(alpha = 0.15f), radius = radius)
 
                 // Tick marks every 30 degrees (rotating dial).
-                rotate(degrees = -azimuth) {
+                rotate(degrees = -calibrated) {
                     for (deg in 0 until 360 step 30) {
                         rotate(degrees = deg.toFloat()) {
                             val isCardinal = deg % 90 == 0
@@ -136,10 +144,26 @@ fun CompassScreen(onBack: () -> Unit) {
             }
 
             Text(
-                text = "${azimuth.roundToInt()}° ${cardinalDirection(azimuth)}",
+                text = "${calibrated.roundToInt()}° ${cardinalDirection(calibrated)}",
                 style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.primary,
             )
+
+            Button(
+                onClick = { offsetDeg = azimuth },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Calibrate (point the top of the phone north first)")
+            }
+            if (offsetDeg != 0f) {
+                OutlinedButton(
+                    onClick = { offsetDeg = 0f },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Reset calibration")
+                }
+            }
+
             Text(
                 text = "Red needle points north. Keep the phone flat, away from metal.",
                 style = MaterialTheme.typography.bodySmall,

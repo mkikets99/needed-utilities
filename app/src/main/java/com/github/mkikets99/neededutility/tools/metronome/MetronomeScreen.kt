@@ -3,6 +3,7 @@ package com.github.mkikets99.neededutility.tools.metronome
 import com.github.mkikets99.neededutility.ui.common.ToolTopBar
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.os.SystemClock
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -47,6 +49,7 @@ fun MetronomeScreen(onBack: () -> Unit) {
     var bpm by remember { mutableFloatStateOf(120f) }
     var running by remember { mutableStateOf(false) }
     var beat by remember { mutableIntStateOf(0) }
+    var taps by remember { mutableStateOf(listOf<Long>()) }
 
     val toneGenerator = remember { ToneGenerator(AudioManager.STREAM_MUSIC, 80) }
     DisposableEffect(Unit) {
@@ -54,10 +57,17 @@ fun MetronomeScreen(onBack: () -> Unit) {
     }
 
     LaunchedEffect(running) {
-        while (running) {
-            toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP, 60)
-            beat++
-            delay(60_000L / bpm.toInt())
+        if (running) {
+            // Drift-free scheduling: every beat targets an absolute time so
+            // per-iteration overhead cannot accumulate (S-03).
+            var nextBeat = SystemClock.elapsedRealtime()
+            while (true) {
+                toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP, 60)
+                beat++
+                nextBeat += 60_000L / bpm.toInt()
+                val wait = nextBeat - SystemClock.elapsedRealtime()
+                if (wait > 0) delay(wait)
+            }
         }
     }
 
@@ -107,6 +117,18 @@ fun MetronomeScreen(onBack: () -> Unit) {
                 enabled = !running,
                 modifier = Modifier.fillMaxWidth(),
             )
+
+            OutlinedButton(
+                onClick = {
+                    val now = SystemClock.elapsedRealtime()
+                    taps = (taps + now).takeLast(6)
+                    TapTempo.bpmFromTaps(taps)?.let { bpm = it.toFloat() }
+                },
+                enabled = !running,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Tap tempo (tap 3+ times)")
+            }
 
             Button(
                 onClick = { running = !running },

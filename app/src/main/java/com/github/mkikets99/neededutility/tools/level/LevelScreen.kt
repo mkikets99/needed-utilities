@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -53,6 +55,12 @@ fun LevelScreen(onBack: () -> Unit) {
     var pitch by remember { mutableFloatStateOf(0f) }
     var roll by remember { mutableFloatStateOf(0f) }
     var hasSensor by remember { mutableStateOf(true) }
+    var zeroPitch by remember { mutableFloatStateOf(0f) }
+    var zeroRoll by remember { mutableFloatStateOf(0f) }
+
+    // S-04: "Zero here" calibration against the current surface.
+    val adjPitch = pitch - zeroPitch
+    val adjRoll = roll - zeroRoll
 
     DisposableEffect(sensorManager) {
         val listener = object : SensorEventListener {
@@ -77,7 +85,7 @@ fun LevelScreen(onBack: () -> Unit) {
         onDispose { sensorManager.unregisterListener(listener) }
     }
 
-    val isLevel = kotlin.math.abs(pitch) < 1f && kotlin.math.abs(roll) < 1f
+    val isLevel = kotlin.math.abs(adjPitch) < 1f && kotlin.math.abs(adjRoll) < 1f
 
     Scaffold(
         topBar = {
@@ -138,8 +146,8 @@ fun LevelScreen(onBack: () -> Unit) {
                     modifier = Modifier
                         .size(56.dp)
                         .graphicsLayer {
-                            translationX = (roll / 45f).coerceIn(-1f, 1f) * 90.dp.toPx()
-                            translationY = (pitch / 45f).coerceIn(-1f, 1f) * 90.dp.toPx()
+                            translationX = (adjRoll / 45f).coerceIn(-1f, 1f) * 90.dp.toPx()
+                            translationY = (adjPitch / 45f).coerceIn(-1f, 1f) * 90.dp.toPx()
                         }
                         .background(
                             color = if (isLevel) MaterialTheme.colorScheme.primary
@@ -157,13 +165,31 @@ fun LevelScreen(onBack: () -> Unit) {
             )
             Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                 Text(
-                    text = "Pitch ${pitch.roundToInt()}°",
+                    text = "Pitch ${adjPitch.roundToInt()}°",
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    text = "Roll ${roll.roundToInt()}°",
+                    text = "Roll ${adjRoll.roundToInt()}°",
                     style = MaterialTheme.typography.titleMedium,
                 )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Button(
+                    onClick = {
+                        zeroPitch = pitch
+                        zeroRoll = roll
+                    },
+                ) {
+                    Text("Zero here")
+                }
+                OutlinedButton(
+                    onClick = {
+                        zeroPitch = 0f
+                        zeroRoll = 0f
+                    },
+                ) {
+                    Text("Reset")
+                }
             }
             Text(
                 text = "Place the phone on a surface; the bubble settles in the center when level.",

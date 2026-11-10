@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 
 /**
  * Schedules local notifications for countdown events via AlarmManager.
@@ -20,11 +21,24 @@ object CountdownNotifier {
             .atZone(java.time.ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
-        alarmManager.set(
-            AlarmManager.RTC_WAKEUP,
-            triggerAt,
-            pendingIntent(context, event.id, event.name),
-        )
+        val pendingIntent = pendingIntent(context, event.id, event.name)
+        // S-02: exact alarms where permitted (Android 12+ grants them
+        // optionally); graceful inexact fallback otherwise.
+        val canExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+            alarmManager.canScheduleExactAlarms()
+        if (canExact) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                triggerAt,
+                pendingIntent,
+            )
+        } else {
+            alarmManager.setAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                triggerAt,
+                pendingIntent,
+            )
+        }
     }
 
     fun cancel(context: Context, eventId: Long) {
