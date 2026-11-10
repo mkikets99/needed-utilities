@@ -10,12 +10,12 @@
 # ============================================================
 
 # AdMob application ID (from AdMob console -> App settings)
-ADMOB_APP_ID=ca-app-pub-3940256099942544~3347511713
+ADMOB_APP_ID=ca-app-pub-5916969587500655~3359243119
 
 # Banner ad unit (home screen, bottom)
-ADMOB_BANNER_UNIT_ID=ca-app-pub-3940256099942544/6300978111
+ADMOB_BANNER_UNIT_ID=ca-app-pub-5916969587500655/5239300993
 
 # Interstitial ad unit (shown every 5th tool switch)
-ADMOB_INTERSTITIAL_UNIT_ID=ca-app-pub-3940256099942544/1033173712
+ADMOB_INTERSTITIAL_UNIT_ID=ca-app-pub-5916969587500655/5047729309
 
 # Reserved for later (S-13 paywall is one-time IAP, no key needed here)

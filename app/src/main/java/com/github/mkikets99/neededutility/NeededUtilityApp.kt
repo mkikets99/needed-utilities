@@ -13,6 +13,8 @@ import com.github.mkikets99.neededutility.data.SettingsRepository
 import com.github.mkikets99.neededutility.data.ThemeMode
 import com.github.mkikets99.neededutility.data.ThemeSettings
 import com.github.mkikets99.neededutility.data.ToolPreferences
+import com.github.mkikets99.neededutility.monetization.AdManager
+import com.github.mkikets99.neededutility.monetization.findActivity
 import com.github.mkikets99.neededutility.tools.age.AgeScreen
 import com.github.mkikets99.neededutility.tools.bases.BaseConverterScreen
 import com.github.mkikets99.neededutility.tools.bmi.BmiScreen
@@ -126,7 +128,15 @@ fun NeededUtilityApp() {
         NavHost(navController = navController, startDestination = Routes.HOME) {
             composable(Routes.HOME) {
                 HomeScreen(
-                    onToolClick = { tool -> navController.navigate(tool.route) },
+                    onToolClick = { tool ->
+                        val showAd = AdManager.onToolOpened()
+                        navController.navigate(tool.route)
+                        if (showAd) {
+                            context.findActivity()?.let { activity ->
+                                AdManager.showInterstitialIfReady(activity)
+                            }
+                        }
+                    },
                     onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                     layoutMode = settings.homeLayout,
                 )

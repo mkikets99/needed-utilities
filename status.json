@@ -1,16 +1,16 @@
 {
   "name": "needed-utility",
   "stack": "kotlin-jetpack-compose",
-  "phase": "v6-complete",
+  "phase": "v8-complete",
   "status": "on-track",
   "buildStatus": "passing",
-  "summary": "Offline-first multi-tool toolbox with 42 tools across 7 groups. v6 added multi timer (concurrent + kitchen presets), fuel log (consumption stats), salary converter, number-to-words, countdown notifications (AlarmManager + boot rescheduling), note tag chips, QR contact/vCard mode, scan-history export, and release signing (signed app-release.apk verified). 159 unit tests green, zero warnings.",
+  "summary": "v8 integrated AdMob per user recipe: home banner + interstitial on every 5th tool switch (re-opening same tool counts), keys from ad-mob.txt via BuildConfig, best-effort loading (offline-safe). v7 added home UI modes (Cards/List) and shared ToolTopBar/NumberField across all 42 tools. 163 tests green. Next: S-13 Pro paywall gating ads.",
   "nextSteps": [
-    "Password manager tool (deferred; generator already in Randomizer)",
-    "Fuel log: per-vehicle logs and CSV export",
-    "Candidates: recipe scaler, BMI history, converter favorites, vCard gallery",
-    "Play Store prep (listing assets, AAB via bundleRelease)",
-    "More shared composables extraction (input fields, top bars)"
+    "S-13 Pro paywall (one-time IAP): gate ads + lift caps (25/25/100)",
+    "S-02 countdown exact alarms, S-03 metronome tap tempo, S-04 sensor calibration",
+    "S-16 localization prep (strings.xml for en, en-GB, uk, pl, de, fr, es)",
+    "S-05..S-10, S-14, S-15 feature block (favorites, exports, vehicles, BMI history, recipe scaler, currency, password vault)",
+    "Candidates C-01..C-22 as capacity allows; Play release (D-03) when ready"
   ],
   "lastUpdated": "2026-11-10"
 }

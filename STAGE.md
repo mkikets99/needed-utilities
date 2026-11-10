@@ -46,22 +46,21 @@ forward-looking plan only).
 
 | ID | Item | Description | Notes |
 |---|---|---|---|
-| S-12 | AdMob ads | Banner on home + interstitial **every 5th tool switch** (re-opening same tool counts); keys live in `ad-mob.txt` | Recipe in `ad-mob-recipe.txt`; deps pre-approved: `play-services-ads` |
 | S-13 | One-time "Pro" paywall | Removes ads + lifts free-tier caps | Deps pre-approved: `billing-client`; **generous caps: 25 notes / 25 events / 100 entries** |
 
 > Publish-to-Play is **not** required to build S-12/S-13 — use test ads and
 > Play Billing test flow first (D-03 stays deferred until publishing intent).
 
-## 💰 Monetization track
+## Monetization
 
-- **Free tier**: all tools usable, ads shown, generous soft caps (25 notes,
-  25 countdown events, 100 fuel/trip entries).
-- **Pro (one-time purchase)**: removes all ads + lifts every cap. No
-  subscriptions. One shared `isPro` gate for S-12 + S-13.
-- **AdMob**: banner on home, interstitial **every 5th tool switch** (any tool
-  open counts, including re-opening the same tool). Keys live in `ad-mob.txt`
-  (currently Google test IDs — replace with real ones anytime). Recipe:
-  `ad-mob-recipe.txt`.
+- **AdMob integrated (v8)**: banner on home (collapses until loaded — no gray
+  placeholder) + interstitial **every 5th tool switch** (any tool open counts,
+  re-opening the same tool included — `AdFrequency` unit-tested). Keys live in
+  `ad-mob.txt` → `BuildConfig` (user's real IDs since 2026-11-10). Ads are
+  best-effort: offline or failed loads never affect tools.
+- **Pro (one-time purchase, S-13 — next)**: removes all ads + lifts caps.
+  No subscriptions. One shared `isPro` gate; generous caps (25 notes / 25
+  events / 100 entries).
 
 ## 🔵 Deferred
 
@@ -112,10 +111,10 @@ All reviewed 2026-11-10 and **approved as candidates**:
 
 ## Suggested build order
 
-1. ~~S-01 → S-11~~ ✅ done (v7)
+1. ~~S-01 → S-11~~ ✅ done (v7); ~~S-12~~ ✅ done (v8)
 2. **S-02 → S-03 → S-04** (tool polish) and **S-16** (localization prep)
 3. **S-05 → S-06 → S-07 → S-08 → S-09 → S-10 → S-14 → S-15**
-4. **S-12 + S-13** together (shared `isPro` gate, test ads/billing)
+4. **S-13** (Pro paywall — now gates the shipped ads)
 5. Candidates promoted from the backlog as capacity allows; revisit **D-03**
    when ready to publish.
 

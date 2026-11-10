@@ -16,6 +16,14 @@ val keystoreProperties = Properties().apply {
     }
 }
 
+// AdMob keys: ad-mob.txt (see ad-mob-recipe.txt). Test IDs by default.
+val adMobFile = rootProject.file("ad-mob.txt")
+val adMob = Properties().apply {
+    if (adMobFile.exists()) {
+        adMobFile.inputStream().use { load(it) }
+    }
+}
+
 android {
     namespace = "com.github.mkikets99.neededutility"
     compileSdk = 37
@@ -26,6 +34,23 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
+
+        buildConfigField(
+            "String",
+            "ADMOB_APP_ID",
+            "\"${adMob.getProperty("ADMOB_APP_ID", "")}\"",
+        )
+        buildConfigField(
+            "String",
+            "ADMOB_BANNER_UNIT_ID",
+            "\"${adMob.getProperty("ADMOB_BANNER_UNIT_ID", "")}\"",
+        )
+        buildConfigField(
+            "String",
+            "ADMOB_INTERSTITIAL_UNIT_ID",
+            "\"${adMob.getProperty("ADMOB_INTERSTITIAL_UNIT_ID", "")}\"",
+        )
+        manifestPlaceholders["ADMOB_APP_ID"] = adMob.getProperty("ADMOB_APP_ID", "")
     }
 
     signingConfigs {
@@ -58,6 +83,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     packaging {
@@ -90,6 +116,8 @@ dependencies {
 
     implementation(libs.zxing.android.embedded)
     implementation(libs.zxing.core)
+
+    implementation(libs.play.services.ads)
 
     testImplementation(libs.junit)
     debugImplementation(libs.androidx.ui.tooling)

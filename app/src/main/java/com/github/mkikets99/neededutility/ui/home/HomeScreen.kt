@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.mkikets99.neededutility.data.HomeLayoutMode
+import com.github.mkikets99.neededutility.monetization.AdManager
 import com.github.mkikets99.neededutility.tools.Tool
 import com.github.mkikets99.neededutility.tools.ToolGroup
 import com.github.mkikets99.neededutility.tools.ToolRegistry
@@ -62,13 +63,16 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         val grouped = ToolRegistry.tools.groupBy { it.group }
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
             ToolGroup.entries.forEach { group ->
                 val tools = grouped[group].orEmpty()
                 if (tools.isNotEmpty()) {
@@ -116,6 +120,8 @@ fun HomeScreen(
                     }
                 }
             }
+        }
+            AdManager.HomeBanner()
         }
     }
 }

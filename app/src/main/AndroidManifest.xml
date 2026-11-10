@@ -3,6 +3,8 @@
 
     <!-- Needed to toggle the camera torch (Flashlight tool). -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Ads (AdMob). Tools remain fully offline. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Timer completion feedback. -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -19,6 +21,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NeededUtility">
+
+        <!-- AdMob App ID (from ad-mob.txt via manifestPlaceholders). -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${ADMOB_APP_ID}" />
 
         <activity
             android:name=".MainActivity"

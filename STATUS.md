@@ -47,6 +47,16 @@ Builds fall back to debug signing when no keystore is present.
 - Settings: theme mode, dynamic color, **home layout (Cards / List)** — all
   persisted via DataStore.
 
+## Monetization
+
+- **AdMob live (v8)**: home-screen banner (collapses until an ad loads — no
+  gray placeholder) + interstitial **every 5th tool switch**, where any tool
+  open counts and re-opening the same tool included (`AdFrequency`, unit
+  tested). Keys in `ad-mob.txt` → `BuildConfig`; ads are best-effort and
+  never affect tools offline.
+- **Pro (S-13, next)**: one-time purchase, removes ads + lifts caps
+  (25 notes / 25 events / 100 entries).
+
 ## Known issues / TODO
 
 - Countdown alarms are inexact; a permission prompt for exact alarms could
